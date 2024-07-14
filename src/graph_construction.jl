@@ -25,7 +25,7 @@ function detect_islands(g)
 end
 
 ##Loading and preprocessing
-function create_graph(ports_coordinates)
+function create_graph(ports_coordinates,country_name)
     begin #load data
         nuts_fc = GeoJSON.read(read("data/NUTS_LB_2021_4326.geojson"))
         nuts_dict = Dict(f.NUTS_ID => f.geometry for f in nuts_fc)
@@ -82,14 +82,14 @@ function create_graph(ports_coordinates)
         :y_coor = round(:y_coor, digits = 6)
     end
     nodes_df_DE = filter(nodes_df) do n
-        n.country_code == "DE"
+        n.country_code == country_name
     end
     @transform! consumers_df @byrow begin 
         :x_coor = round(:x_coor, digits = 6)
         :y_coor = round(:y_coor, digits = 6)
     end
     consumers_df_DE = filter(consumers_df) do n
-        n.country_code == "DE"
+        n.country_code == country_name
     end
     arcs_df = @combine groupby(arcs_df, [:from_x_coor, :from_y_coor, :to_x_coor, :to_y_coor]) begin #merge duplicate arcs
         :pipe_id = prod(:pipe_id)
@@ -128,7 +128,7 @@ function create_graph(ports_coordinates)
         push!(coo_to_node, (r.x_coor, r.y_coor) => id)
     end
     for r in eachrow(arcs_df)
-        if r.to_country != "DE" || r.from_country != "DE"
+        if r.to_country != country_name || r.from_country != country_name
             continue
         end
         from, to = coo_to_node[(r.from_x_coor, r.from_y_coor)], coo_to_node[(r.to_x_coor, r.to_y_coor)]
@@ -156,7 +156,7 @@ function create_graph(ports_coordinates)
 
     ##############Edges addition
     for r in eachrow(arcs_df)
-        if r.to_country != "DE" || r.from_country != "DE" || (r.from_x_coor, r.from_y_coor) ∉ keys(coo_to_node) || (r.to_x_coor, r.to_y_coor) ∉ keys(coo_to_node)
+        if r.to_country != country_name || r.from_country != country_name || (r.from_x_coor, r.from_y_coor) ∉ keys(coo_to_node) || (r.to_x_coor, r.to_y_coor) ∉ keys(coo_to_node)
             continue
         end
         from, to = coo_to_node[(r.from_x_coor, r.from_y_coor)], coo_to_node[(r.to_x_coor, r.to_y_coor)]
@@ -185,7 +185,7 @@ function create_graph(ports_coordinates)
     total_TH_MW = sum(props(g, node)[:capacity_TH_MW] for node in values(consumers_dict) if props(g, node)[:country] == "DE")
     total_MW = total_E_MW + total_TH_MW
     for node in values(consumers_dict) 
-        props(g, node)[:country] == "DE" || continue
+        props(g, node)[:country] == country_name || continue
         percentage_capacity = (props(g, node)[:capacity_E_MW] + props(g, node)[:capacity_TH_MW])/total_MW
         set_prop!(g, node, :demand_percentage, percentage_capacity)
     end
@@ -210,11 +210,11 @@ function create_graph(ports_coordinates)
     export_nodes = Dict{Tuple{Float64,Float64}, Int}()
     
     incoming_arcs = @rsubset border_arcs begin 
-        :to_country == "DE"
+        :to_country == country_name
         (:to_x_coor, :to_y_coor) in keys(coo_to_node)
     end
     outgoing_arcs = @rsubset border_arcs begin 
-        :from_country == "DE"
+        :from_country == country_name
         (:from_x_coor, :from_y_coor) in keys(coo_to_node)
     end
     for r in eachrow(incoming_arcs)
@@ -290,7 +290,7 @@ function create_graph(ports_coordinates)
                 artificial_arcs += 1
                 add_edge!(g, dst, u, Dict(props(g, u, dst)..., :is_bidirectional => true))
                 set_prop!(g, u, dst, :is_bidirectional, true)
-                if get_prop(g, dst, :country) != "DE"
+                if get_prop(g, dst, :country) != country_name
                     set_prop!(g, dst, :is_import, true)
                     push!(import_nodes, get_prop(g, dst, :coordinates) => dst)
                 end
