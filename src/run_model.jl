@@ -1,5 +1,7 @@
 using FSRU, Distances, JuMP
 
+
+# DATA
 coord_AT = {}
 coord_BE = {"ANTWERPEN": (51.217, 4.4), "ZEEBRUGGE": (51.333, 3.2)}
 coord_BG = {"VARNA": (43.183, 27.967)}
@@ -470,6 +472,8 @@ import_countries = [f"import_{country}" for country in countries_lowercase]
 export_countries = [f"export_{country}" for country in countries]
 TOTAL_DEMAND_countries = [f"TOTLA_DEMAND_{country}" for country in countries]
 
+
+# Loop on each country
 for ii in 1:length(countries)
 
     println("######------ Results for country : $(countries[ii]) ------######")
@@ -657,10 +661,12 @@ for ii in 1:length(countries)
     println("opex: ", value(sum(opex_cost)))
     fsruimp = value(sum(fsru_flow))
     println("FSRU imports: ", fsruimp," ", fsruimp*price_fsru)
-    
+
+    # Filtre sur les pays BE NL FR 
     ttfimp = value(sum(sum(import_flow[n,:]) for n in import_set if n in reduce(vcat, [import_countries_set["BE"], import_countries_set["NL"], import_countries_set["FR"]])))
     println("TTF imports: ", ttfimp," ", ttfimp*price_ttf)
-    
+
+    # Filtre sur les pays BE NL FR 
     hhimp = value(sum(sum(import_flow[n,:]) for n in import_set if n ∉ reduce(vcat, [import_countries_set["BE"], import_countries_set["NL"], import_countries_set["FR"]])))
     println("HH imports: ", hhimp," ", hhimp*price_hh)
 
@@ -668,6 +674,10 @@ for ii in 1:length(countries)
     println("penalty: ", pens*p)
     println("total cost (no penalties): ", value(total_cost) -  pens*p)
 
+
+
+
+    
     # Display and registration of plots
     
     if !BROWNFIELD  # brownfield = false
