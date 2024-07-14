@@ -558,6 +558,10 @@ export_SK = Dict("AT"=> 0.0, "BE"=> 0.0, "BG"=> 0.0, "CY"=> 0.0, "CZ"=> 0.0,
             "NL"=> 0.0, "PL"=> 0.00016, "PT"=> 0.0, "RO"=> 0.0, "SE"=> 0.0,
             "SI"=> 0.0, "SK"=> 0.0)
 
+
+price_fsru = 35.29*9769444.44/1e6 #ACER EU spot price [EUR/MWh] converted to M€/bcm (avg 31/03 -> 31/12 2023)
+price_ttf = price_fsru + 2.89*9769444.44/1e6 #add ACER TTF benchmark, converted (avg 31/03 -> 31/12 2023)
+price_hh = 2.496*35315000*1.0867/1e6 #$/mmbtu (US EIA) converted to M€/bcm (US EIA) (avg 04 -> 12 2023)
 country_price_at = Dict("DE" => price_hh, "CZ" => price_hh, "SK" => price_hh, "HU" => price_hh, "SI" => price_hh, "IT" => price_hh, "LI" => price_hh)
 country_price_be = Dict("FR" => price_ttf, "LU" => price_ttf, "DE" => price_ttf, "NL" => price_ttf)
 country_price_bg = Dict("RO" => price_hh, "GR" => price_hh)
