@@ -15,6 +15,7 @@ TOTAL_DEMAND_countries = ["TOTAL_DEMAND_$(country)" for country in countries]
 for ii in 1:length(countries)
 
     println("######------ Results for country : $(countries[ii]) ------######")
+    println(coord_countries[ii])
     println()
     g, consumers_dict, domestic_dict, port_dict, import_dict, export_dict  = create_graph(coord_countries[ii], countries[ii])
 
