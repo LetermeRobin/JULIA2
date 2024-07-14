@@ -35,7 +35,6 @@ import_at = {
     'MT': 0.0, 'NL': 0.0, 'PL': 0.0, 'PT': 0.0, 'RO': 0.0, 'SK': 0.0, 
     'SI': 0.0, 'ES': 0.0, 'SE': 0.0}
 
-
 import_be = {
     'AT': 0.0, 'BE': 0.0, 'BG': 0.0, 'HR': 0.0, 'CY': 0.0, 'CZ': 0.0, 
     'DK': 0.0705, 'EE': 0.0, 'FI': 0.0, 'FR': 1.5821, 'DE': 0.0, 'GR': 0.0, 
@@ -472,6 +471,9 @@ export_countries = [f"export_{country}" for country in countries]
 TOTAL_DEMAND_countries = [f"TOTLA_DEMAND_{country}" for country in countries]
 
 for ii in 1:length(countries)
+
+    println("######------ Results for country : $(countries[ii]) ------######")
+    println()
     g, consumers_dict, domestic_dict, port_dict, import_dict, export_dict  = create_graph(ports_coordinates, countries[ii])
 
     # Sets
@@ -564,124 +566,106 @@ for ii in 1:length(countries)
     nodal_demand = merge(nodal_domestic_demand, nodal_industrial_demand)
     
     println("2022: total supply (imports) = $total_supply\ntotal demand = $(TOTAL_DEMAND[1])\ntotal exports = $total_export\nleaving ", TOTAL_DEMAND[1] + total_export - total_supply, " of capacity needed")
-end
 
 
-
-##Model
-begin
+    # Model
     model = Model(HiGHS.Optimizer)
     @variables model begin 
-        port_upgrade[port_set,periods], Bin
-        port_upgraded[port_set,periods], Bin
-        assign_fsru_to_port[port_set, fsru_set,periods], Bin
-        0 <= arc_flow[i in arc_set, periods] 
+        port_upgrade[port_set, periods], Bin
+        port_upgraded[port_set, periods], Bin
+        assign_fsru_to_port[port_set, fsru_set, periods], Bin
+        0 <= arc_flow[i in arc_set, periods]
         0 <= import_flow[import_set, periods]
         0 <= export_flow[export_set, periods]
-        0 <= fsru_flow[port_set,periods]
+        0 <= fsru_flow[port_set, periods]
     end
+
+    #Constraints
     @constraints model begin
-        #demand satisfaction and flow conservation
+        # Demande satisfaction et conservation du flux
         c_demand_flow[node in setdiff(demand_nodes_set, port_set), t in periods],
-            sum(arc_flow[(src, node),t] for src in inneighbors(g, node)) == sum(arc_flow[(node,dst),t] for dst in outneighbors(g, node)) + nodal_demand[(node,t)]
-        #demand satisfaction and flow conservation at ports
-        c_demand_flow_port[node in port_set,t in periods],
-                fsru_flow[node,t] + sum(arc_flow[(src, node),t] for src in inneighbors(g, node)) == sum(arc_flow[(node,dst),t] for dst in outneighbors(g, node)) + nodal_demand[(node,t)]
-        #fsru port capacity
-        c_fsru_port_capacity[p in port_set,t in periods],
-            fsru_flow[p,t] <= sum(assign_fsru_to_port[p, f, t]*fsru_cap[f] for f in fsru_set)
-        #import flow
-        c_import_flow[node in setdiff(import_set,export_set),t in periods],
-            import_flow[node,t] + sum(arc_flow[(src, node),t] for src in inneighbors(g, node)) == sum(arc_flow[(node,dst),t] for dst in outneighbors(g, node))
-        #country import 
-        c_country_import[c in keys(import_countries_set),t in periods],
-            sum(import_flow[n,t] for n in import_countries_set[c]) <= countries_supply[c]
-        #export flow
+            sum(arc_flow[(src, node), t] for src in inneighbors(g, node)) == sum(arc_flow[(node, dst), t] for dst in outneighbors(g, node)) + nodal_demand[(node, t)]
+        # Satisfaction de la demande et conservation du flux aux ports
+        c_demand_flow_port[node in port_set, t in periods],
+            fsru_flow[node, t] + sum(arc_flow[(src, node), t] for src in inneighbors(g, node)) == sum(arc_flow[(node, dst), t] for dst in outneighbors(g, node)) + nodal_demand[(node, t)]
+        # Capacité du port FSRU
+        c_fsru_port_capacity[p in port_set, t in periods],
+            fsru_flow[p, t] <= sum(assign_fsru_to_port[p, f, t] * fsru_cap[f] for f in fsru_set)
+        # Flux d'importation
+        c_import_flow[node in setdiff(import_set, export_set), t in periods],
+            import_flow[node, t] + sum(arc_flow[(src, node), t] for src in inneighbors(g, node)) == sum(arc_flow[(node, dst), t] for dst in outneighbors(g, node))
+        # Importation par pays
+        c_country_import[c in keys(import_countries_set), t in periods],
+            sum(import_flow[n, t] for n in import_countries_set[c]) <= countries_supply[c]
+        # Flux d'exportation
         c_export_flow[node in setdiff(export_set, import_set), t in periods],
-            sum(arc_flow[(src, node), t] for src in inneighbors(g, node)) == sum(arc_flow[(node,dst),t] for dst in outneighbors(g, node)) + export_flow[node,t]
-        #country export 
-        c_country_export[c in keys(export_countries_set),t in periods],
-            sum(export_flow[n,t] for n in export_countries_set[c]) == countries_demand[c]*demand_multiplier[t]
-        #import + export for nodes that are both
-        c_import_export_flow[node in intersect(export_set, import_set),t in periods],
-            import_flow[node, t] + sum(arc_flow[(src, node),t] for src in inneighbors(g, node)) == sum(arc_flow[(node,dst),t] for dst in outneighbors(g, node)) + export_flow[node,t]
-        #assign FSRU to one port only
-        c_fsru_assign[f in fsru_set,t in periods],
+            sum(arc_flow[(src, node), t] for src in inneighbors(g, node)) == sum(arc_flow[(node, dst), t] for dst in outneighbors(g, node)) + export_flow[node, t]
+        # Exportation par pays
+        c_country_export[c in keys(export_countries_set), t in periods],
+            sum(export_flow[n, t] for n in export_countries_set[c]) == countries_demand[c] * demand_multiplier[t]
+        # Importation + exportation pour les nœuds qui sont les deux
+        c_import_export_flow[node in intersect(export_set, import_set), t in periods],
+            import_flow[node, t] + sum(arc_flow[(src, node), t] for src in inneighbors(g, node)) == sum(arc_flow[(node, dst), t] for dst in outneighbors(g, node)) + export_flow[node, t]
+        # Assignation FSRU à un seul port
+        c_fsru_assign[f in fsru_set, t in periods],
             sum(assign_fsru_to_port[port, f, t] for port in port_set) <= 1
-        #max fsru per port
-        c_port_assign[p in port_set,t in periods],
-            sum(assign_fsru_to_port[p, f, t] for f in fsru_set) <= fsru_per_port[p]*port_upgraded[p,t]
-        #arc capacities
-        c_arc_capacity[a in arc_set,t in periods],
-            arc_flow[a,t] <= arc_capacity[a]
-        #bidirectional
-        c_bidirectional[i in bidirectional_arc_set,t in periods],
-            arc_flow[i,t] + arc_flow[(i[2], i[1]),t] <= arc_capacity[i]
-        #upgrading
+        # Max FSRU par port
+        c_port_assign[p in port_set, t in periods],
+            sum(assign_fsru_to_port[p, f, t] for f in fsru_set) <= fsru_per_port[p] * port_upgraded[p, t]
+        # Capacités des arcs
+        c_arc_capacity[a in arc_set, t in periods],
+            arc_flow[a, t] <= arc_capacity[a]
+        # Bidirectionnel
+        c_bidirectional[i in bidirectional_arc_set, t in periods],
+            arc_flow[i, t] + arc_flow[(i[2], i[1]), t] <= arc_capacity[i]
+        # Mise à niveau
         c_upgrading[p in port_set, t in periods],
-            port_upgraded[p,t] <= sum(port_upgrade[p,k] for k in 1:t)
-
-            
+            port_upgraded[p, t] <= sum(port_upgrade[p, k] for k in 1:t)
     end
-    if BROWNFIELD 
-        @constraints model begin
-            port_upgrade[port_dict["Wilhelmshaven"],1] == 1
-            port_upgrade[port_dict["Brunsbüttel"],1] == 1
-            port_upgrade[port_dict["Lubmin"],1] == 1
-            port_upgrade[port_dict["Stade"],2] == 1
-            port_upgrade[port_dict["Mukran"],2] == 1
-        end
+
+    @expression(model, capex_cost[t in periods], sum(port_upgrade[p, t] * port_capex[t] for p in port_set))
+    @expression(model, opex_cost[t in periods], sum(assign_fsru_to_port[p, f, t] * port_opex for p in port_set, f in fsru_set))
+    @expression(model, pipeline_construction_cost[t in periods], sum(port_upgrade[p, t] * fsru_per_port[p] * new_pipeline_length[p] * pipeline_cost_per_km for p in port_set))
+    @expression(model, arc_flow_cost[t in periods], sum(arc_flow[a, t] * arc_length[a] for a in arc_set) * flow_cost)
+    @expression(model, fsru_price_cost[t in periods], sum(fsru_flow[p, t] for p in port_set) * price_fsru)
+    @expression(model, import_price_cost[t in periods], sum(country_price[c] * import_flow[n, t] for c in keys(import_countries_set) for n in import_countries_set[c]))
+    @expression(model, total_cost, sum(γ^t * (capex_cost[t] + opex_cost[t] + pipeline_construction_cost[t] + arc_flow_cost[t] + fsru_price_cost[t] + import_price_cost[t]) for t in periods))
+    @objective(model Min total_cost)
+    
+    optimize!(model)
+
+    println("Solution pour le pays $country")
+    solution_summary(model)
+    println("\nPort upgrades:")
+    for (c, n) in port_dict 
+        println(c * "($n)" => round.(Int, value.(port_upgrade)[n, :])')
     end
-    @expression(model, capex_cost[t in periods], sum(port_upgrade[p,t]*port_capex[t] for p in port_set))
-    @expression(model, opex_cost[t in periods], sum(assign_fsru_to_port[p,f,t]*port_opex for p in port_set, f in fsru_set))
-    @expression(model, pipeline_construction_cost[t in periods], sum(port_upgrade[p,t]*fsru_per_port[p]*new_pipeline_length[p]*pipeline_cost_per_km for p in port_set))
-    @expression(model, arc_flow_cost[t in periods], sum(arc_flow[a,t]*arc_length[a] for a in arc_set)*flow_cost)
-    @expression(model, fsru_price_cost[t in periods], sum(fsru_flow[p,t] for p in port_set)*price_fsru)
-    @expression(model, import_price_cost[t in periods], sum(country_price[c]*import_flow[n,t] for c in keys(import_countries_set) for n in import_countries_set[c]))
-    @expression(model, total_cost, sum(γ^t*(capex_cost[t] + opex_cost[t] +  pipeline_construction_cost[t] + arc_flow_cost[t] + fsru_price_cost[t] + import_price_cost[t]) for t in periods))
-    @objective model Min total_cost
-end;
-#optimize!(model) #Infeasible
+    println("\nimports:")
+    for (c, nodes) in import_countries_set
+        println(c => [round(sum(value(import_flow[n, t]) for n in nodes), digits = 3) for t in periods]')
+    end
+    println("\nexports:")
+    for (c, nodes) in export_countries_set    
+        println(c => [sum(value(export_flow[n, t]) for t in periods) for n in nodes]')
+    end
+    println("\nFSRU imports:")
+    for (c,n) in port_dict
+        println(c*"($n)" => round.(value.(fsru_flow)[n,:], digits =2)')
+    end
 
-p = 1e0
-c_map = relax_with_penalty!(model, merge(Dict(model[:c_arc_capacity] .=> p), Dict(model[:c_bidirectional] .=> p)))
+    println("capex: ", value(sum(capex_cost)) + value(sum(pipeline_construction_cost)))
+    println("opex: ", value(sum(opex_cost)))
+    fsruimp = value(sum(fsru_flow))
+    println("FSRU imports: ", fsruimp," ", fsruimp*price_fsru)
+    
+    ttfimp = value(sum(sum(import_flow[n,:]) for n in import_set if n in reduce(vcat, [import_countries_set["BE"], import_countries_set["NL"], import_countries_set["FR"]])))
+    println("TTF imports: ", ttfimp," ", ttfimp*price_ttf)
+    
+    hhimp = value(sum(sum(import_flow[n,:]) for n in import_set if n ∉ reduce(vcat, [import_countries_set["BE"], import_countries_set["NL"], import_countries_set["FR"]])))
+    println("HH imports: ", hhimp," ", hhimp*price_hh)
 
-optimize!(model)
-solution_summary(model)
-penalties = Dict(con => value(penalty) for (con, penalty) in c_map if value(penalty) > 0);
-@assert all(>=(0), values(penalties))
-maximum(values(penalties))
-pens = sum(values(penalties))
+    
+    println("penalty: ", pens*p)
+    println("total cost (no penalties): ", value(total_cost) -  pens*p)
 
-penalized_cons = filter(kv -> value(kv.second) > 0, c_map)
-penalized_arcs = [eval(Meta.parse(match(r"\[(.*)\]", name(k)).captures[1]))[1] for k in keys(penalized_cons)] |> unique
-
-
-println("\nPort upgrades:")
-for (c,n) in port_dict 
-    println(c*"($n)" => round.(Int,value.(port_upgrade)[n,:])')
 end
-println("\nimports:")
-for (c, nodes) in import_countries_set
-    println(c => [round(sum(value(import_flow[n,t]) for n in nodes), digits = 3) for t in periods]')
-end
-println("\nexports:")
-for (c, nodes) in export_countries_set    
-    println(c => [sum(value(export_flow[n,t]) for n in nodes) for t in periods]')
-end
-println("\nFSRU imports:")
-for (c,n) in port_dict
-    println(c*"($n)" => round.(value.(fsru_flow)[n,:], digits =2)')
-end
-
-
-println("capex: ", value(sum(capex_cost)) + value(sum(pipeline_construction_cost)))
-println("opex: ", value(sum(opex_cost)))
-fsruimp = value(sum(fsru_flow))
-println("FSRU imports: ", fsruimp," ", fsruimp*price_fsru)
-ttfimp = value(sum(sum(import_flow[n,:]) for n in import_set if n in reduce(vcat, [import_countries_set["BE"], import_countries_set["NL"], import_countries_set["FR"]])))
-println("TTF imports: ", ttfimp," ", ttfimp*price_ttf)
-hhimp = value(sum(sum(import_flow[n,:]) for n in import_set if n ∉ reduce(vcat, [import_countries_set["BE"], import_countries_set["NL"], import_countries_set["FR"]])))
-println("HH imports: ", hhimp," ", hhimp*price_hh)
-println("penalty: ", pens*p)
-println("total cost (no penalties): ", value(total_cost) -  pens*p)
