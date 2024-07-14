@@ -1,4 +1,4 @@
-if !BROWNFIELD
+if !BROWNFIELD  #brownfield = false
     include("graph_plotting.jl")
     FSRU.GLMakie.activate!(inline=true)
 
