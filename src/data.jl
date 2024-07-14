@@ -233,7 +233,7 @@ coord_HR = Dict(
     "KORCULA" => (42.933, 17.133)
 )
 
-coord_HU = {}
+coord_HU = Dict()
 
 coord_IE = Dict(
     "GALWAY" => (53.267, -9.05),
@@ -287,7 +287,7 @@ coord_LT = Dict(
     "BUTINGE OIL TERMINAL" => (56.033, 20.95)
 )
 
-coord_LU = {}
+coord_LU = Dict()
 
 coord_LV = Dict(
     "VENTSPILS" => (57.4, 21.533),
@@ -365,9 +365,9 @@ coord_SE = Dict(
     "BOLLSTABRUK" => (63, 17.7)
 )
 
-coord_SI = {}
+coord_SI = Dict()
 
-coord_SK = {}
+coord_SK = Dict()
 
 
 country_price_at = Dict("DE" => price_hh, "CZ" => price_hh, "SK" => price_hh, "HU" => price_hh, "SI" => price_hh, "IT" => price_hh, "LI" => price_hh)
