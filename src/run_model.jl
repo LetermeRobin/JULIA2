@@ -523,7 +523,7 @@ for ii in 1:length(countries)
     arc_length = Dict(a => get_prop(g, a..., :length_km) for a in arc_set)
     flow_cost = 0.0 #M€/km/bcm
     
-    # Supply
+    # Supply / Import
     countries_supply = import_countries[ii]
     price_fsru = 35.29*9769444.44/1e6 #ACER EU spot price [EUR/MWh] converted to M€/bcm (avg 31/03 -> 31/12 2023)
     price_ttf = price_fsru + 2.89*9769444.44/1e6 #add ACER TTF benchmark, converted (avg 31/03 -> 31/12 2023)
@@ -674,8 +674,8 @@ for ii in 1:length(countries)
         include("graph_plotting.jl")
         FSRU.GLMakie.activate!(inline=true)
 
-        de_map = map_network(g, consumers_dict, domestic_dict, port_dict, import_dict, export_dict, ports_coordinates, highlight_arcs = penalized_arcs)
-        save("de_map_$(countries[ii]).png", de_map)
+        map = map_network(g, consumers_dict, domestic_dict, port_dict, import_dict, export_dict, ports_coordinates, highlight_arcs = penalized_arcs)
+        save("$(countries[ii])_map.png", map)
     end
 
     colors = [Makie.wong_colors(); [:green, :darkblue, :lightgreen]]
