@@ -469,16 +469,12 @@ coord_countries = [f"coord_{country}" for country in countries]
 country_prices : [f"country_price_{country}" for country in countries_lowercase]
 import_countries = [f"import_{country}" for country in countries_lowercase]
 export_countries = [f"export_{country}" for country in countries]
-TOTAL_DEMANDE_countries = [f"TOTLA_DEMAND_{country}" for country in countries]
+TOTAL_DEMAND_countries = [f"TOTLA_DEMAND_{country}" for country in countries]
 
 for ii in 1:length(countries)
-        
-    g, consumers_dict, domestic_dict, port_dict, import_dict, export_dict  = create_graph(ports_coordinates,countries[ii])
+    g, consumers_dict, domestic_dict, port_dict, import_dict, export_dict  = create_graph(ports_coordinates, countries[ii])
 
-end
-
-##Sets 
-begin
+    # Sets
     periods = 1:length(2023:2050)
     node_set = vertices(g)
     arc_dict = Dict(i => (e.src, e.dst) for (i,e) in enumerate(edges(g)))
@@ -492,6 +488,7 @@ begin
     port_set = Set(values(port_dict))
     export_set = values(export_dict)
     import_set = values(import_dict)
+    
     export_countries_set = Dict{String, Vector{Int}}()
     for n in export_set
         c = get_prop(g, n, :country) 
@@ -501,6 +498,7 @@ begin
             export_countries_set[c] = [n]
         end
     end
+
     import_countries_set = Dict{String, Vector{Int}}() 
     for n in import_set
         c = get_prop(g, n, :country)
@@ -510,63 +508,66 @@ begin
             import_countries_set[c] = [n]
         end
     end
+
     fsru_set = 1:12
     demand_nodes_set = union(Set(domestic_set), Set(consumers_set))
     supply_nodes_set = union(Set(port_set), Set(import_set))
-end
-##Parameters 
-begin
+
+    # Parameters
     γ = 0.99
     demand_multiplier = range(start = 1, stop = 0, length = length(periods)+1)[2:end]
     arc_capacity = Dict([a => get_prop(g, a..., :capacity_Mm3_per_d)*365/1000 for a in arc_set]) #bcm3 per year
     arc_bidirectional = Dict([a => get_prop(g, a..., :is_bidirectional) for a in arc_set])
     arc_length = Dict(a => get_prop(g, a..., :length_km) for a in arc_set)
-    flow_cost = 0. #2.64e-5 #M€/km/bcm
-    ##Supply
-    #import    
-    countries_supply = Dict("BE" => 26.58, "AT" => 0.39, "NO" => 49.24, "CZ" => 11.96, "CH" => 1.69, "FR" => 0.42, "PL" => 0.3, "DK" => 0.001, "NL" => 26.15, "FI" => 0.) #bcm3 per year
+    flow_cost = 0.0 #M€/km/bcm
+    
+    # Supply
+    countries_supply = import_countries[ii]
     price_fsru = 35.29*9769444.44/1e6 #ACER EU spot price [EUR/MWh] converted to M€/bcm (avg 31/03 -> 31/12 2023)
     price_ttf = price_fsru + 2.89*9769444.44/1e6 #add ACER TTF benchmark, converted (avg 31/03 -> 31/12 2023)
     price_hh = 2.496*35315000*1.0867/1e6 #$/mmbtu (US EIA) converted to M€/bcm (US EIA) (avg 04 -> 12 2023)
-    country_price = Dict("BE" => price_ttf, "AT" => price_hh, "NO" => price_hh, "CZ" => price_hh, "CH" => price_hh, "FR" => price_ttf, "PL" => price_hh, "DK" => price_hh, "NL" => price_ttf, "FI" => 0.)
+    country_price = country_prices[ii]
     total_import = sum(values(countries_supply))
-    #ports
+
+    # Ports
     fsru_per_port = Dict(port_set .=> 1); 
-    fsru_per_port[port_dict["Wilhelmshaven"]] = 2
     new_pipeline_length = Dict(node => haversine(ports_coordinates[city], get_prop(g,node,:coordinates))/1000 for (city, node) in port_dict) #km
     investment_horizon = 10
     pipeline_cost_per_km = 0.3  #(capex + opex, depends on diameter) #M€
     total_capex = 1000 - new_pipeline_length[port_dict["Wilhelmshaven"]]*pipeline_cost_per_km*fsru_per_port[port_dict["Wilhelmshaven"]]
     port_capex = fill(sum(total_capex/investment_horizon/(1 + (1-γ))^t for t in 1:investment_horizon), length(periods))
     port_opex = 0.02*total_capex #opex per fsru in use
-    #FSRUs
+
+    # FSRUs
     fsru_cap = Dict(fsru_set .=> 5) #bcm per year
-    #all
+
+    # All
     total_supply = sum(values(countries_supply))
-    ##Demand
-    if DEMAND == "Ours"
-        TOTAL_DEMAND = range(86.7,0.,length(2022:2050))[2:end]
-    elseif DEMAND == "NZE"
-        TOTAL_DEMAND = [[(812+855)/2, 812, (794+812)/2]; range(794,582,length(2026:2030)); range(582,0.,length(2030:2050))[2:end]]*0.1
-    elseif DEMAND == "DE Gov"
-        TOTAL_DEMAND = [[86.0, 85.0, 82.0, 80.3, 78.7, 77.1, 75.5]; range(74.1, 0.,length(2030:2050))]
-    else 
-        error("Invalid DEMAND parameter \"$DEMAND\"")
-    end
-    #export
-    countries_demand = Dict("BE" => 0., "AT" => 8.03, "LU" => 0., "CZ" => 29.57, "CH" => 3.36, "FR" => 1.37, "PL" => 3.76, "FI" => 0., "DK" => 2.17, "NL" => 2.77) #bcm3 per year 
-    total_export = sum(values(countries_demand))                                                  
-    #domestic
-    total_domestic_demand = 0.59.*TOTAL_DEMAND #bcm3 per year
+    
+    # Demand
+    TOTAL_DEMAND = TOTAL_DEMAND_countries[ii]
+
+    # Export
+    countries_demand = export_countries[ii] 
+    total_export = sum(values(countries_demand))
+    
+    # Domestic
+    total_domestic_demand = 0.59 * TOTAL_DEMAND #bcm3 per year
     TOT = sum(get_prop(g, n, :gdp_percentage) for n in domestic_set)
     nodal_domestic_demand = Dict((n,t) => get_prop(g, n, :gdp_percentage)*total_domestic_demand[t]*1/TOT for n in domestic_set for t in 1:length(periods))
-    #industrial
-    total_industrial_demand = 0.41.*TOTAL_DEMAND #bcm3 per year
+    
+    # Industrial
+    total_industrial_demand = 0.41 * TOTAL_DEMAND #bcm3 per year
     nodal_industrial_demand = Dict((n,t) => get_prop(g, n, :demand_percentage)*total_industrial_demand[t] for n in consumers_set for t in 1:length(periods))
-    #all demand 
+    
+    # All demand 
     nodal_demand = merge(nodal_domestic_demand, nodal_industrial_demand)
+    
     println("2022: total supply (imports) = $total_supply\ntotal demand = $(TOTAL_DEMAND[1])\ntotal exports = $total_export\nleaving ", TOTAL_DEMAND[1] + total_export - total_supply, " of capacity needed")
 end
+
+
+
 ##Model
 begin
     model = Model(HiGHS.Optimizer)
