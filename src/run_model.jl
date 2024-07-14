@@ -67,9 +67,6 @@ for ii in 1:length(countries)
     
     # Supply / Import
     countries_supply = import_countries[ii]
-    price_fsru = 35.29*9769444.44/1e6 #ACER EU spot price [EUR/MWh] converted to M€/bcm (avg 31/03 -> 31/12 2023)
-    price_ttf = price_fsru + 2.89*9769444.44/1e6 #add ACER TTF benchmark, converted (avg 31/03 -> 31/12 2023)
-    price_hh = 2.496*35315000*1.0867/1e6 #$/mmbtu (US EIA) converted to M€/bcm (US EIA) (avg 04 -> 12 2023)
     country_price = country_prices[ii]
     total_import = sum(values(countries_supply))
 
