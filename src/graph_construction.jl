@@ -81,14 +81,14 @@ function create_graph(ports_coordinates,country_name)
         :x_coor = round(:x_coor, digits = 6)
         :y_coor = round(:y_coor, digits = 6)
     end
-    nodes_df_DE = filter(nodes_df) do n
+    nodes_df_country = filter(nodes_df) do n
         n.country_code == country_name
     end
     @transform! consumers_df @byrow begin 
         :x_coor = round(:x_coor, digits = 6)
         :y_coor = round(:y_coor, digits = 6)
     end
-    consumers_df_DE = filter(consumers_df) do n
+    consumers_df_country = filter(consumers_df) do n
         n.country_code == country_name
     end
     arcs_df = @combine groupby(arcs_df, [:from_x_coor, :from_y_coor, :to_x_coor, :to_y_coor]) begin #merge duplicate arcs
@@ -120,7 +120,7 @@ function create_graph(ports_coordinates,country_name)
     g_i = MetaGraph(g)
     coo_to_node = Dict{Tuple{Float64,Float64}, Int}()
     
-    for (id,r) in enumerate(eachrow(nodes_df_DE))
+    for (id,r) in enumerate(eachrow(nodes_df_country))
         @assert add_vertex!(g_i)
         if (r.x_coor, r.y_coor) in keys(coo_to_node)
             @warn "Duplicate nodes at identical coordinates"
@@ -138,21 +138,21 @@ function create_graph(ports_coordinates,country_name)
     rem_nodes = collect(reduce(union,islands))
     if !isempty(islands)
         @info "$(length(islands)) islands of $(length(rem_nodes)) disconnected nodes were removed. They respectively contained $(length.(islands)) nodes."
-        removed_nodes = nodes_df_DE[rem_nodes,:]
-        deleteat!(nodes_df_DE, sort(rem_nodes))
+        removed_nodes = nodes_df_country[rem_nodes,:]
+        deleteat!(nodes_df_country, sort(rem_nodes))
     end
     empty!(coo_to_node)
     ############### Nodes addition
 
-    for (id,r) in enumerate(eachrow(nodes_df_DE))
+    for (id,r) in enumerate(eachrow(nodes_df_country))
         @assert add_vertex!(g, Dict(:node_number => id, :node_id => r.node_id, :coordinates => (r.x_coor, r.y_coor), :country => r.country_code, :nuts2 => r.nuts_id_2))
         if (r.x_coor, r.y_coor) in keys(coo_to_node)
             @warn "Duplicate nodes at identical coordinates"
         end
         push!(coo_to_node, (r.x_coor, r.y_coor) => id)
     end
-    unlinked_nuts = filter(n -> n ∉ nodes_df_DE.nuts_id_2, population_df.geo) 
-    all(n -> n in population_df.geo, nodes_df_DE.nuts_id_2)
+    unlinked_nuts = filter(n -> n ∉ nodes_df_country.nuts_id_2, population_df.geo) 
+    all(n -> n in population_df.geo, nodes_df_country.nuts_id_2)
 
     ##############Edges addition
     for r in eachrow(arcs_df)
@@ -174,15 +174,15 @@ function create_graph(ports_coordinates,country_name)
 
     ######### Consumer node props
     consumers_dict = Dict{Tuple{Float64,Float64}, Int}()
-    for r in eachrow(consumers_df_DE)
+    for r in eachrow(consumers_df_country)
         coo = (r.x_coor, r.y_coor)
         coo in keys(coo_to_node) || continue
         node_id = coo_to_node[coo]
         set_props!(g, node_id, Dict(:capacity_E_MW => r.capacity_E_MW, :capacity_TH_MW => r.capacity_TH_MW))
         push!(consumers_dict, coo => node_id)
     end
-    total_E_MW = sum(props(g, node)[:capacity_E_MW] for node in values(consumers_dict) if props(g, node)[:country] == "DE")
-    total_TH_MW = sum(props(g, node)[:capacity_TH_MW] for node in values(consumers_dict) if props(g, node)[:country] == "DE")
+    total_E_MW = sum(props(g, node)[:capacity_E_MW] for node in values(consumers_dict) if props(g, node)[:country] == country_name)
+    total_TH_MW = sum(props(g, node)[:capacity_TH_MW] for node in values(consumers_dict) if props(g, node)[:country] == country_name)
     total_MW = total_E_MW + total_TH_MW
     for node in values(consumers_dict) 
         props(g, node)[:country] == country_name || continue
@@ -203,7 +203,7 @@ function create_graph(ports_coordinates,country_name)
 
     ###### Import/Export
     border_arcs = filter(arcs_df) do r
-        ((r.to_country != "DE") ⊻ (r.from_country != "DE"))
+        ((r.to_country != country_name) ⊻ (r.from_country != country_name))
     end
 
     import_nodes = Dict{Tuple{Float64,Float64}, Int}()
@@ -265,7 +265,7 @@ function create_graph(ports_coordinates,country_name)
     end
     sp = floyd_warshall_shortest_paths(g)
     
-    domestic_df = @chain nodes_df_DE begin
+    domestic_df = @chain nodes_df_country begin
         @rsubset (:x_coor, :y_coor) ∉ keys(consumers_dict) && (:x_coor, :y_coor) in keys(coo_to_node)
     end
     domestic_dict = Dict{Tuple{Float64,Float64}, Int}()
