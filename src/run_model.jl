@@ -1,5 +1,6 @@
 using FSRU, Distances, JuMP
 
+include data.jl
 
 # DATA
 coord_AT = {}
