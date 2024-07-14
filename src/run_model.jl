@@ -168,19 +168,36 @@ for ii in 1:length(countries)
             port_upgraded[p, t] <= sum(port_upgrade[p, k] for k in 1:t)
     end
 
-    @expression(model, capex_cost[t in periods], sum(port_upgrade[p, t] * port_capex[t] for p in port_set))
-    @expression(model, opex_cost[t in periods], sum(assign_fsru_to_port[p, f, t] * port_opex for p in port_set, f in fsru_set))
-    @expression(model, pipeline_construction_cost[t in periods], sum(port_upgrade[p, t] * fsru_per_port[p] * new_pipeline_length[p] * pipeline_cost_per_km for p in port_set))
-    @expression(model, arc_flow_cost[t in periods], sum(arc_flow[a, t] * arc_length[a] for a in arc_set) * flow_cost)
-    @expression(model, fsru_price_cost[t in periods], sum(fsru_flow[p, t] for p in port_set) * price_fsru)
-    @expression(model, import_price_cost[t in periods], sum(country_price[c] * import_flow[n, t] for c in keys(import_countries_set) for n in import_countries_set[c]))
-    @expression(model, total_cost, sum(γ^t * (capex_cost[t] + opex_cost[t] + pipeline_construction_cost[t] + arc_flow_cost[t] + fsru_price_cost[t] + import_price_cost[t]) for t in periods))
-    @objective(model Min total_cost)
-    
-    optimize!(model)
+    if BROWNFIELD 
+        @constraints model begin
+            port_upgrade[port_dict["Wilhelmshaven"],1] == 1
+            port_upgrade[port_dict["Brunsbüttel"],1] == 1
+            port_upgrade[port_dict["Lubmin"],1] == 1
+            port_upgrade[port_dict["Stade"],2] == 1
+            port_upgrade[port_dict["Mukran"],2] == 1
+        end
+    end
+    @expression(model, capex_cost[t in periods], sum(port_upgrade[p,t]*port_capex[t] for p in port_set))
+    @expression(model, opex_cost[t in periods], sum(assign_fsru_to_port[p,f,t]*port_opex for p in port_set, f in fsru_set))
+    @expression(model, pipeline_construction_cost[t in periods], sum(port_upgrade[p,t]*fsru_per_port[p]*new_pipeline_length[p]*pipeline_cost_per_km for p in port_set))
+    @expression(model, arc_flow_cost[t in periods], sum(arc_flow[a,t]*arc_length[a] for a in arc_set)*flow_cost)
+    @expression(model, fsru_price_cost[t in periods], sum(fsru_flow[p,t] for p in port_set)*price_fsru)
+    @expression(model, import_price_cost[t in periods], sum(country_price[c]*import_flow[n,t] for c in keys(import_countries_set) for n in import_countries_set[c]))
+    @expression(model, total_cost, sum(γ^t*(capex_cost[t] + opex_cost[t] +  pipeline_construction_cost[t] + arc_flow_cost[t] + fsru_price_cost[t] + import_price_cost[t]) for t in periods))
+    @objective model Min total_cost
+    p = 1e0
+    c_map = relax_with_penalty!(model, merge(Dict(model[:c_arc_capacity] .=> p), Dict(model[:c_bidirectional] .=> p)))
 
-    println("Solution pour le pays $country")
+    optimize!(model)
     solution_summary(model)
+    penalties = Dict(con => value(penalty) for (con, penalty) in c_map if value(penalty) > 0);
+    @assert all(>=(0), values(penalties))
+    maximum(values(penalties))
+    pens = sum(values(penalties))
+
+    penalized_cons = filter(kv -> value(kv.second) > 0, c_map)
+    penalized_arcs = [eval(Meta.parse(match(r"\[(.*)\]", name(k)).captures[1]))[1] for k in keys(penalized_cons)] |> unique
+
     println("\nPort upgrades:")
     for (c, n) in port_dict 
         println(c * "($n)" => round.(Int, value.(port_upgrade)[n, :])')
