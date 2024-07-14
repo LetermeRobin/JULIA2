@@ -5,7 +5,7 @@ include("data.jl")
 countries = ["AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK"]
 countries_lowercase = [lowercase(country) for country in countries]
 
-coord_countries = ["coord_$country" for country in countries]
+coord_countries = [Symbol("coord_$country") for country in countries]
 country_prices = ["country_price_$(lowercase(country))" for country in countries]
 import_countries = ["import_$(lowercase(country))" for country in countries]
 export_countries = ["export_$(country)" for country in countries]
