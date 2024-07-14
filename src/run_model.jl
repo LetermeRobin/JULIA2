@@ -471,7 +471,11 @@ import_countries = [f"import_{country}" for country in countries_lowercase]
 export_countries = [f"export_{country}" for country in countries]
 TOTAL_DEMANDE_countries = [f"TOTLA_DEMAND_{country}" for country in countries]
 
-g, consumers_dict, domestic_dict, port_dict, import_dict, export_dict  = create_graph(ports_coordinates)
+for ii in 1:length(countries)
+        
+    g, consumers_dict, domestic_dict, port_dict, import_dict, export_dict  = create_graph(ports_coordinates,countries[ii])
+
+end
 
 ##Sets 
 begin
