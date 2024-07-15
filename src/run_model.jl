@@ -123,7 +123,7 @@ for ii in 1:length(countries)
     # All demand 
     nodal_demand = merge(nodal_domestic_demand, nodal_industrial_demand)
     
-    println("2022: total supply (imports) = $total_supply\ntotal demand = $(TOTAL_DEMAND[1])\ntotal exports = $total_export\nleaving ", TOTAL_DEMAND[1] + total_export - total_supply, " of capacity needed")
+    println("2025: total supply (imports) = $total_supply\ntotal demand = $(TOTAL_DEMAND[1])\ntotal exports = $total_export\nleaving ", TOTAL_DEMAND[1] + total_export - total_supply, " of capacity needed")
 
 
     # Model
