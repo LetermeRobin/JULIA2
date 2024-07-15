@@ -422,7 +422,7 @@ import_dk = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, , "NO" => 0.772796
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "NO" => 0.772796
 )
 
 import_de = Dict(
@@ -610,7 +610,7 @@ country_price_lt = Dict("LV" => price_hh, "BY" => price_hh, "PL" => price_hh, "N
 country_price_lu = Dict("BE" => price_ttf, "DE" => price_ttf, "FR" => price_ttf, "NL" => price_hh, "NO" => price_hh, "NotSpec" => price_hh)
 country_price_mt = Dict("US" => price_hh, "TT" => price_hh)
 country_price_nl = Dict("BE" => price_ttf, "DE" => price_ttf, "FR" => price_hh,"ES" => price_hh, "SE" => price_hh, "RU" => price_hh, "NO" => price_hh, "NotSpec" => price_hh, "AO" => price_hh, "CM" => price_hh, "GQ" => price_hh, "DZ" => price_hh, "EG" => price_hh, "NG" => price_hh, "US" => price_hh, "TT" => price_hh,"QA" => price_hh )
-country_price_pl = Dict("DE" => price_hh, "CZ" => price_hh, "SK" => price_hh, "LT" => price_hh, "RU" => price_hh, "EG" => price_hh "NG" => price_hh, "US" => price_hh, "TT" => price_hh,"QA" => price_hh)
+country_price_pl = Dict("DE" => price_hh, "CZ" => price_hh, "SK" => price_hh, "LT" => price_hh, "RU" => price_hh, "EG" => price_hh, "NG" => price_hh, "US" => price_hh, "TT" => price_hh,"QA" => price_hh)
 country_price_pt = Dict("ES" => price_hh, "SE" => price_hh, "RU" => price_hh, "GQ" => price_hh, "NG" => price_hh, "US" => price_hh, "TT" => price_hh) 
 country_price_cz = Dict("DE" => price_hh, "PL" => price_hh, "SK" => price_hh, "AT" => price_hh)
 country_price_ro = Dict("BG" => price_hh, "GR" => price_hh, "HU" => price_hh, "IT" => price_hh, "SK" => price_hh,"RU" => price_hh)
@@ -644,7 +644,7 @@ TOTAL_DEMAND_SI = range(0.8353, 0., length(2025:2050))[2:end]
 TOTAL_DEMAND_SK = range(6.191, 0., length(2025:2050))[2:end]
 TOTAL_DEMAND_FI = range(1.368, 0., length(2025:2050))[2:end]
 TOTAL_DEMAND_SE = range(0.751766, 0., length(2025:2050))[2:end]
-TOTAL_DEMAND_CY = range(0.751766, 0., length(2025:2050))[2:end]
+TOTAL_DEMAND_CY = range(0., 0., length(2025:2050))[2:end]
 
 export_AT = Dict("AT"=> 0.0, "BE"=> 0.0, "BG"=> 0.0, "CY"=> 0.0, "CZ"=> 0.0,
             "DE"=> 0.0, "DK"=> 0.0, "EE"=> 0.0, "ES"=> 0.0, "FI"=> 0.0,
