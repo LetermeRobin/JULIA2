@@ -135,7 +135,7 @@ function create_graph(ports_coordinates,country_name)
         inserted = add_edge!(g_i, from, to, Dict(:length_km => r.length_km))
     end
     islands = sort(detect_islands(g_i), by = length)[1:end-1]
-    rem_nodes = collect(reduce(union,islands,init=0))
+    rem_nodes = collect(reduce(union,islands,init=[]))
     if !isempty(islands)
         @info "$(length(islands)) islands of $(length(rem_nodes)) disconnected nodes were removed. They respectively contained $(length.(islands)) nodes."
         removed_nodes = nodes_df_country[rem_nodes,:]
@@ -303,6 +303,7 @@ function create_graph(ports_coordinates,country_name)
 
     ############# Domestic nodes demands
     domestic_df = innerjoin(domestic_df, nuts_df, on = :nuts_id_2 => :geo)
+    println(domestic_df)
     @rename! domestic_df begin :nuts_2_coordinates = :coordinates; :nuts_gdp = :gdp end
     nuts_incapacities = Dict{String, Float64}()
     for r in eachrow(domestic_df)
