@@ -18,7 +18,7 @@ for ii in 1:length(countries)
     g, consumers_dict, domestic_dict, port_dict, import_dict, export_dict  = create_graph(coord_countries[ii], countries[ii])
 
     # Sets
-    periods = 1:length(2023:2050)
+    periods = 1:length(2025:2050)
     node_set = vertices(g)
     arc_dict = Dict(i => (e.src, e.dst) for (i,e) in enumerate(edges(g)))
     arc_set = values(arc_dict)
