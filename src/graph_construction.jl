@@ -78,6 +78,7 @@ function create_graph(ports_coordinates,country_name)
         TOTAL_GDP = sum(nuts_df.gdp)
         @rtransform! nuts_df begin
             :gdp_percentage = :gdp / TOTAL_GDP
+        end
     end
     @transform! nodes_df @byrow begin 
         :x_coor = round(:x_coor, digits = 6)
