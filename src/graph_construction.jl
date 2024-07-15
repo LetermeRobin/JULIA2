@@ -51,8 +51,8 @@ function create_graph(ports_coordinates,country_name)
         end
         population_df = CSV.read("data/demo_r_pjangroup_linear.csv", DataFrame)
         @rsubset! population_df begin
-            occursin(r"^DE..$", :geo) #filter DE nuts2
-            :TIME_PERIOD == 2022
+            occursin(r"^$country_name..$", :geo)   #filter country_name nuts2
+            :TIME_PERIOD == 2025
             :age == "TOTAL"
             :sex == "T"
         end
