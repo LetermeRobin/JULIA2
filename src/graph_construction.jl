@@ -69,7 +69,7 @@ function create_graph(ports_coordinates,country_name)
             :gdppc = :OBS_VALUE
         end
         @rsubset! gdp_df begin
-            occursin(r"^DE..$", :geo) #filter DE nuts2
+            occursin(r"^$country_name..$", :geo)   #filter country_name nuts2
         end
         nuts_df = innerjoin(gdp_df, population_df, on = :geo)
         @rtransform! nuts_df begin
