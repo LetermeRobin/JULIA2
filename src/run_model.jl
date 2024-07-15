@@ -95,16 +95,16 @@ for ii in 1:length(countries)
     # Domestic
     total_domestic_demand = 0.59 * TOTAL_DEMAND #bcm3 per year
     for n in domestic_set
-        if hasproperty(g, node_id, :gdp_percentage)
-            current_percentage = get_prop(g, node_id, :gdp_percentage)
+        if hasproperty(g,n, :gdp_percentage)
+            current_percentage = get_prop(g, n, :gdp_percentage)
         else
             current_percentage = 0.0  # Initialize to zero if property doesn't exist
         end
         TOT += current_percentage
     end
     for n in domestic_set
-        if hasproperty(g, node_id, :gdp_percentage)
-            current_percentage = get_prop(g, node_id, :gdp_percentage)
+        if hasproperty(g, n, :gdp_percentage)
+            current_percentage = get_prop(g, n, :gdp_percentage)
         else
             current_percentage = 0.0  # Initialize to zero if property doesn't exist
         end
