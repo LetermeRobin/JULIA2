@@ -338,7 +338,11 @@ function create_graph(ports_coordinates,country_name)
         for neigh in knn
             node_id = coo_to_node[neigh]
             incapacity = sum(get_prop(g, n, node_id, :capacity_Mm3_per_d) for n in inneighbors(g, node_id))
-            current_percentage = get_prop(g, node_id, :gdp_percentage)
+            if hasproperty(g, node_id, :gdp_percentage)
+                current_percentage = get_prop(g, node_id, :gdp_percentage)
+            else
+                current_percentage = 0.0  # Initialize to zero if property doesn't exist
+            end
             set_prop!(g, node_id, :gdp_percentage, current_percentage + incapacity/total_neigh_incapacity*nut_proportion) #add the unlinked percentage to old percentage
         end
     end
