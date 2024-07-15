@@ -75,7 +75,7 @@ for ii in 1:length(countries)
     new_pipeline_length = Dict(node => haversine(ports_coordinates[city], get_prop(g,node,:coordinates))/1000 for (city, node) in port_dict) #km
     investment_horizon = 10
     pipeline_cost_per_km = 0.3  #(capex + opex, depends on diameter) #M€
-    total_capex = 1000 - new_pipeline_length[port_dict["Wilhelmshaven"]]*pipeline_cost_per_km*fsru_per_port[port_dict["Wilhelmshaven"]]
+    total_capex = 1000 #- new_pipeline_length[port_dict["Wilhelmshaven"]]*pipeline_cost_per_km*fsru_per_port[port_dict["Wilhelmshaven"]]
     port_capex = fill(sum(total_capex/investment_horizon/(1 + (1-γ))^t for t in 1:investment_horizon), length(periods))
     port_opex = 0.02*total_capex #opex per fsru in use
 
@@ -162,14 +162,6 @@ for ii in 1:length(countries)
             port_upgraded[p, t] <= sum(port_upgrade[p, k] for k in 1:t)
     end
 
-    if BROWNFIELD 
-        @constraints model begin
-            port_upgrade[port_dict["Wilhelmshaven"],1] == 1
-            port_upgrade[port_dict["Brunsbüttel"],1] == 1
-            port_upgrade[port_dict["Lubmin"],1] == 1
-            port_upgrade[port_dict["Stade"],2] == 1
-            port_upgrade[port_dict["Mukran"],2] == 1
-        end
     end
     @expression(model, capex_cost[t in periods], sum(port_upgrade[p,t]*port_capex[t] for p in port_set))
     @expression(model, opex_cost[t in periods], sum(assign_fsru_to_port[p,f,t]*port_opex for p in port_set, f in fsru_set))
