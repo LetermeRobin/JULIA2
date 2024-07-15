@@ -33,7 +33,7 @@ function create_graph(ports_coordinates,country_name)
         nodes_fc = GeoJSON.read(read("data/IGGIELGN_Nodes.geojson"))
         nodes_df = DataFrame(node_id = String[], x_coor = Float64[], y_coor = Float64[], country_code = String[], nuts_id_2 = String[])
         for n in nodes_fc
-            n.country_code == "FI" && continue #remove nordstream
+            #n.country_code == "FI" && continue #remove nordstream
             push!(nodes_df, [n.id, n.geometry.coordinates..., n.country_code, n.param["nuts_id_2"]])
         end
 
@@ -135,7 +135,7 @@ function create_graph(ports_coordinates,country_name)
         inserted = add_edge!(g_i, from, to, Dict(:length_km => r.length_km))
     end
     islands = sort(detect_islands(g_i), by = length)[1:end-1]
-    rem_nodes = collect(reduce(union,islands))
+    rem_nodes = collect(reduce(union,islands,init=0))
     if !isempty(islands)
         @info "$(length(islands)) islands of $(length(rem_nodes)) disconnected nodes were removed. They respectively contained $(length.(islands)) nodes."
         removed_nodes = nodes_df_country[rem_nodes,:]
