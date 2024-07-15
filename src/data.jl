@@ -374,7 +374,7 @@ import_at = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "NotSpec" => 12.9190
 )
 
 import_be = Dict(
@@ -382,7 +382,7 @@ import_be = Dict(
     "DK" => 0.0705, "EE" => 0.0, "FI" => 0.0, "FR" => 1.5821, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 2.2492, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "NotSpec" => 0.202,"QA" => 5.7919, "US" => 1.9417, "RU" => 2.9356, "NO" => 5.092, "UK" => 3.7653, "AO" => 0.0908, "CM" => 0.0959, "GQ" => 0.083, "DZ" => 0.1853, "EG" => 0.0887
 )
 
 import_bg = Dict(
@@ -390,7 +390,7 @@ import_bg = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.766452, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.000539, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "RU" => 1.205349, "US" => 0.3886, "AZ" => 0.55
 )
 
 import_hr = Dict(
@@ -398,7 +398,7 @@ import_hr = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.095736, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.386551, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.386551, "ES" => 0.0, "SE" => 0.0, "EG" => 0.285451, "US" => 2.121875, "QA" => 0.091, "NG" =>0.015696, "US" => 2.121875, "TT" => 0.012148,"QA" => 0.091301
 )
 
 import_cy = Dict(
@@ -414,7 +414,7 @@ import_cz = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "NotSpec" => 2.401, "RU" => 5.145676, "NO" => 1.065306
 )
 
 import_dk = Dict(
@@ -422,7 +422,7 @@ import_dk = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, , "NO" => 0.772796
 )
 
 import_de = Dict(
@@ -430,7 +430,7 @@ import_de = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "RU" => 25.941, "NO" =>27.690345, "NotSpec" => 34.063124
 )
 
 import_ee = Dict(
@@ -454,7 +454,7 @@ import_gr = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 0.038995, "SE" => 0.0058
+    "SI" => 0.0, "ES" => 0.038995, "SE" => 0.0058, "RU" => 1.0, "NO" => 0.190687, "TR" => 0.220744, "CM" => 0.05871, "DZ" => 0.478791, "EG" => 0.445394, "NG" => 0.255058, "US" => 1.858949, "AZ" => 1.133814,"OM" => 0.88517
 )
 
 import_es = Dict(
@@ -462,7 +462,7 @@ import_es = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 1.695126, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.000017, "PL" => 0.0, "PT" => 0.416749, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "RU" =>4.982849, "AO" => 0.275957, "CM" => 0.282763, "GQ" => 0.528595, "DZ" => 9.377573, "EG" => 1.338512, "NG" => 5.675006, "US" => 11.459903, "TT" => 1.124433,"QA" => 1.372527,"OM" => 0.524446
 )
 
 import_fi = Dict(
@@ -470,38 +470,31 @@ import_fi = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "RU" =>0.677, "EG" =>0.02
 )
 import_fr = Dict(
     "AT" => 0.0, "BE" => 0.076036, "BG" => 0.0, "HR" => 0.0, "CY" => 0.0, "CZ" => 0.0, 
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.150836, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 2.144371, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 1.070599, "SE" => 0.0
+    "SI" => 0.0, "ES" => 1.070599, "SE" => 0.0, "RU" => 8.437921, "NO" => 12.407, "NotSpec" => 9.458985, "DZ" => 4.535723, "NG" => 1.117503, "US" => 13.711083,"QA" => 2.240465
 )
 
-import_hr = Dict(
-    "AT" => 0.011145, "BE" => 0.001597, "BG" => 0.0, "HR" => 0.0, "CY" => 0.0, "CZ" => 0.0, 
-    "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0, 
-    "HU" => 0.095736, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
-    "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.386551, "ES" => 0.0, "SE" => 0.0
-)
 
 import_it = Dict(
     "AT" => 0.0, "BE" => 0.0, "BG" => 0.0, "HR" => 0.0, "CY" => 0.0, "CZ" => 0.0, 
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.016995, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.373015, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.022753, "ES" => 0.918329, "SE" => 0.0
+    "SI" => 0.022753, "ES" => 0.918329, "SE" => 0.0, "RU" => 13.987589, "NO" => 6.214956, "DZ" => 25.92301, "EG" => 0.906481, "LY" => 3.120008, "NG" =>0.185003, "US" => 3.003934, "TT" => 0.221122, "AZ" => 10.325,"QA" => 7.288852
 )
 
 import_lv = Dict(
     "AT" => 0.0, "BE" => 0.0, "BG" => 0.0, "HR" => 0.0, "CY" => 0.0, "CZ" => 0.0, 
-    "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0, 
-    "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
+    "DK" => 0.0, "EE" => 0.0, "FI" => 0.000883, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0, 
+    "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.634013, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "RU" => 0.189
 )
 
 import_lt = Dict(
@@ -509,7 +502,7 @@ import_lt = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "RU" => 0.279, "NO" => 0.8948, "US" => 2.37
 )
 
 import_lu = Dict(
@@ -517,7 +510,7 @@ import_lu = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.051891, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.005601, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "NO" => 0.208646, "NotSpec" =>0.03446
 )
 
 import_hu = Dict(
@@ -525,7 +518,7 @@ import_hu = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "RU" => 7.671, "NotSpec" => 1.643
 )
 
 import_mt = Dict(
@@ -533,7 +526,7 @@ import_mt = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "US" => 0.123764, "TT" => 0.260678
 )
 
 import_nl = Dict(
@@ -541,7 +534,7 @@ import_nl = Dict(
     "DK" => 0.011432, "EE" => 0.0, "FI" => 0.0, "FR" => 3.199986, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 1.866299, "SE" => 0.0
+    "SI" => 0.0, "ES" => 1.866299, "SE" => 0.0, "RU" => 6.376349, "NO" =>9.311929, "NotSpec" => 0.262638, "AO" =>2.673264, "CM" =>0.507399, "GQ" => 0.286443, "DZ" => 0.120687, "EG" => 0.786916, "NG" => 0.21084, "US" => 8.576669, "TT" => 0.939592,"QA" => 0.388523
 )
 
 import_pl = Dict(
@@ -549,7 +542,7 @@ import_pl = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.002097, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "RU" => 2.9863, "EG" => 0.091324, "NG" => 0.178842, "US" => 3.434586, "TT" => 0.100681,"QA" => 2.300273
 )
 
 import_pt = Dict(
@@ -557,7 +550,7 @@ import_pt = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0, 
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0, 
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0, 
-    "SI" => 0.0, "ES" => 1.61503, "SE" => 0.0
+    "SI" => 0.0, "ES" => 1.61503, "SE" => 0.0, "RU" =>0.298711, "GQ" => 0.096635, "NG" => 2.917249, "US" => 2.003996, "TT" => 0.382434
 )
 
 import_ro = Dict(
@@ -565,7 +558,7 @@ import_ro = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.004789,
     "HU" => 0.417758, "IE" => 0.0, "IT" => 0.000026, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0,
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.029515,
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "RU" =>0.365493
 )
 
 import_se = Dict(
@@ -573,7 +566,7 @@ import_se = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0,
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0,
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0,
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "RU" =>0.057, "NO" => 0.54185, "US" => 0.003865
 )
 
 import_si = Dict(
@@ -581,7 +574,7 @@ import_si = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0,
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0,
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0,
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "RU" => 0.071, "DZ" =>0.031741
 )
 
 import_sk = Dict(
@@ -589,41 +582,41 @@ import_sk = Dict(
     "DK" => 0.0, "EE" => 0.0, "FI" => 0.0, "FR" => 0.0, "DE" => 0.0, "GR" => 0.0,
     "HU" => 0.0, "IE" => 0.0, "IT" => 0.0, "LV" => 0.0, "LT" => 0.0, "LU" => 0.0,
     "MT" => 0.0, "NL" => 0.0, "PL" => 0.0, "PT" => 0.0, "RO" => 0.0, "SK" => 0.0,
-    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0
+    "SI" => 0.0, "ES" => 0.0, "SE" => 0.0, "RU" =>2.388, "NotSpec" => 3.803
 )
 
 
 price_fsru = 35.29*9769444.44/1e6 #ACER EU spot price [EUR/MWh] converted to M€/bcm (avg 31/03 -> 31/12 2023)
 price_ttf = price_fsru + 2.89*9769444.44/1e6 #add ACER TTF benchmark, converted (avg 31/03 -> 31/12 2023)
 price_hh = 2.496*35315000*1.0867/1e6 #$/mmbtu (US EIA) converted to M€/bcm (US EIA) (avg 04 -> 12 2023)
-country_price_at = Dict("DE" => price_hh, "CZ" => price_hh, "SK" => price_hh, "HU" => price_hh, "SI" => price_hh, "IT" => price_hh, "LI" => price_hh)
-country_price_be = Dict("FR" => price_ttf, "LU" => price_ttf, "DE" => price_ttf, "NL" => price_ttf)
-country_price_bg = Dict("RO" => price_hh, "GR" => price_hh)
+country_price_at = Dict("DE" => price_hh, "CZ" => price_hh, "SK" => price_hh, "HU" => price_hh, "SI" => price_hh, "IT" => price_hh, "LI" => price_hh, "NotSpec" => price_hh)
+country_price_be = Dict("FR" => price_ttf, "LU" => price_ttf, "DE" => price_ttf, "NL" => price_ttf, "NotSpec" => price_hh,"QA" => price_hh, "US" => price_hh, "RU" => price_hh, "NO" => price_hh, "UK" => price_hh, "AO" => price_hh, "CM" => price_hh, "GQ" => price_hh, "DZ" => price_hh, "EG" => price_hh, "DK" => price_hh)
+country_price_bg = Dict("RO" => price_hh, "GR" => price_hh, "RU" => price_hh, "US" => price_hh, "AZ" => price_hh)
 country_price_cy = Dict()
+country_price_cz = Dict("DE" => price_hh, "PL" => price_hh, "SK" => price_hh, "AT" => price_hh, "NotSpec" => price_hh, "RU" => price_hh, "NO" => price_hh)
+country_price_hr = Dict("SI" => price_hh, "HU" => price_hh, "EG" => price_hh, "US" => price_hh, "QA" => price_hh, "NG" => price_hh, "US" => price_hh, "TT" => price_hh,"QA" => price_hh, "BE" => price_hh)
+country_price_de = Dict("BE" => price_ttf, "AT" => price_hh, "NO" => price_hh, "CZ" => price_hh, "CH" => price_hh, "FR" => price_ttf, "PL" => price_hh, "DK" => price_hh, "NL" => price_ttf, "FI" => 0., "RU" => price_hh, "NotSpec" => price_hh)
+country_price_dk = Dict("DE" => price_hh, "NO" => price_hh)
+country_price_es = Dict("PT" => price_hh, "FR" => price_hh, "BE" => price_hh, "NL" => price_hh, "RU" => price_hh, "AO" => price_hh, "CM" => price_hh, "GQ" => price_hh, "DZ" => price_hh, "EG" => price_hh, "NG" => price_hh, "US" => price_hh, "TT" => price_hh, "QA" => price_hh," OM" => price_hh)
+country_price_ee = Dict("LT" => price_hh)
+country_price_fi = Dict("SE" => price_hh, "NO" => price_hh, "RU" => price_hh, "EG" => price_hh)
+country_price_fr = Dict("BE" => price_ttf, "LU" => price_ttf, "DE" => price_ttf, "CH" => price_ttf, "IT" => price_ttf, "ES" => price_ttf, "RU" => price_hh, "NO" => price_hh, "NotSpec" => price_hh, "DZ" => price_hh, "NG" => price_hh, "US" => price_hh,"QA" => price_hh )
+country_price_gr = Dict("BG" => price_hh, "RU" => 1.0, "NO" => price_hh, "TR" => price_hh, "CM" => price_hh, "DZ" => price_hh, "EG" => price_hh, "NG" => price_hh, "US" => price_hh, "AZ" => price_hh,"OM" => price_hh, "ES" => price_hh, "SE" => price_hh)
+country_price_hu = Dict("AT" => price_hh, "SK" => price_hh, "RO" => price_hh, "HR" => price_hh, "SI" => price_hh, "RU" => price_hh, "NotSpec" => price_hh)
+country_price_ie = Dict("UK" => price_hh)
+country_price_it = Dict("FR" => price_hh, "AT" => price_hh, "SI" => price_hh, "NL" => price_hh, "SI" => price_hh, "ES" => price_hh, "RU" => price_hh, "NO" => price_hh, "DZ" => price_hh, "EG" => price_hh, "LY" => price_hh, "NG" => price_hh, "US" => price_hh, "TT" => price_hh, "AZ" => price_hh,"QA" => price_hh)
+country_price_lv = Dict("FI" => price_hh, "LT" => price_hh, "RU" => price_hh)
+country_price_lt = Dict("LV" => price_hh, "BY" => price_hh, "PL" => price_hh, "NO" => price_hh, "NO" => price_hh, "US" => price_hh)
+country_price_lu = Dict("BE" => price_ttf, "DE" => price_ttf, "FR" => price_ttf, "NL" => price_hh, "NO" => price_hh, "NotSpec" => price_hh)
+country_price_mt = Dict("US" => price_hh, "TT" => price_hh)
+country_price_nl = Dict("BE" => price_ttf, "DE" => price_ttf, "FR" => price_hh,"ES" => price_hh, "SE" => price_hh, "RU" => price_hh, "NO" => price_hh, "NotSpec" => price_hh, "AO" => price_hh, "CM" => price_hh, "GQ" => price_hh, "DZ" => price_hh, "EG" => price_hh, "NG" => price_hh, "US" => price_hh, "TT" => price_hh,"QA" => price_hh )
+country_price_pl = Dict("DE" => price_hh, "CZ" => price_hh, "SK" => price_hh, "LT" => price_hh, "RU" => price_hh, "EG" => price_hh "NG" => price_hh, "US" => price_hh, "TT" => price_hh,"QA" => price_hh)
+country_price_pt = Dict("ES" => price_hh, "SE" => price_hh, "RU" => price_hh, "GQ" => price_hh, "NG" => price_hh, "US" => price_hh, "TT" => price_hh) 
 country_price_cz = Dict("DE" => price_hh, "PL" => price_hh, "SK" => price_hh, "AT" => price_hh)
-country_price_hr = Dict("SI" => price_hh, "HU" => price_hh)
-country_price_de = Dict("BE" => price_ttf, "AT" => price_hh, "NO" => price_hh, "CZ" => price_hh, "CH" => price_hh, "FR" => price_ttf, "PL" => price_hh, "DK" => price_hh, "NL" => price_ttf, "FI" => 0.)
-country_price_dk = Dict("DE" => price_hh)
-country_price_es = Dict("PT" => price_hh, "FR" => price_hh)
-country_price_ee = Dict("LV" => price_hh)
-country_price_fi = Dict("SE" => price_hh, "NO" => price_hh, "RU" => price_hh)
-country_price_fr = Dict("BE" => price_ttf, "LU" => price_ttf, "DE" => price_ttf, "CH" => price_ttf, "IT" => price_ttf, "ES" => price_ttf)
-country_price_gr = Dict("BG" => price_hh)
-country_price_hu = Dict("AT" => price_hh, "SK" => price_hh, "RO" => price_hh, "HR" => price_hh, "SI" => price_hh)
-country_price_ie = Dict()
-country_price_it = Dict("FR" => price_hh, "AT" => price_hh, "SI" => price_hh)
-country_price_lv = Dict("EE" => price_hh, "LT" => price_hh)
-country_price_lt = Dict("LV" => price_hh, "BY" => price_hh, "PL" => price_hh)
-country_price_lu = Dict("BE" => price_ttf, "DE" => price_ttf, "FR" => price_ttf)
-country_price_mt = Dict()
-country_price_nl = Dict("BE" => price_ttf, "DE" => price_ttf)
-country_price_pl = Dict("DE" => price_hh, "CZ" => price_hh, "SK" => price_hh, "LT" => price_hh)
-country_price_pt = Dict("ES" => price_hh)
-country_price_cz = Dict("DE" => price_hh, "PL" => price_hh, "SK" => price_hh, "AT" => price_hh)
-country_price_ro = Dict("UA" => price_hh, "MD" => price_hh, "HU" => price_hh, "RS" => price_hh, "BG" => price_hh)
-country_price_sk = Dict("CZ" => price_hh, "PL" => price_hh, "UA" => price_hh, "HU" => price_hh, "AT" => price_hh)
-country_price_si = Dict("IT" => price_hh, "AT" => price_hh, "HU" => price_hh, "HR" => price_hh)
-country_price_se = Dict("FI" => price_hh)
+country_price_ro = Dict("BG" => price_hh, "GR" => price_hh, "HU" => price_hh, "IT" => price_hh, "SK" => price_hh,"RU" => price_hh)
+country_price_sk = Dict("CZ" => price_hh, "PL" => price_hh, "UA" => price_hh, "HU" => price_hh, "AT" => price_hh, "RU" => price_hh, "NotSpec" => price_hh)
+country_price_si = Dict("IT" => price_hh, "AT" => price_hh, "HU" => price_hh, "HR" => price_hh, "RU" => price_hh, "DZ" => price_hh)
+country_price_se = Dict("FI" => price_hh, "RU" => price_hh, "NO" => price_hh, "US" => price_hh)
 
 TOTAL_DEMAND_BE = range(24.1743, 0., length(2025:2050))[2:end]
 TOTAL_DEMAND_BG = range(2.911098, 0., length(2025:2050))[2:end]
@@ -651,6 +644,7 @@ TOTAL_DEMAND_SI = range(0.8353, 0., length(2025:2050))[2:end]
 TOTAL_DEMAND_SK = range(6.191, 0., length(2025:2050))[2:end]
 TOTAL_DEMAND_FI = range(1.368, 0., length(2025:2050))[2:end]
 TOTAL_DEMAND_SE = range(0.751766, 0., length(2025:2050))[2:end]
+TOTAL_DEMAND_CY = range(0.751766, 0., length(2025:2050))[2:end]
 
 export_AT = Dict("AT"=> 0.0, "BE"=> 0.0, "BG"=> 0.0, "CY"=> 0.0, "CZ"=> 0.0,
             "DE"=> 0.0, "DK"=> 0.0, "EE"=> 0.0, "ES"=> 0.0, "FI"=> 0.0,
