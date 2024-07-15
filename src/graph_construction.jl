@@ -326,7 +326,6 @@ function create_graph(ports_coordinates,country_name)
     if !isempty(unlinked_nuts) 
         @info "The following nuts2 had no nodes and had their demand assigned to nearest neighbours: $(unlinked_nuts)"
     end
-    println(unlinked_nuts)
     for nut in unlinked_nuts
         nut_row = only(@rsubset nuts_df :geo == nut)
         coor = tuple(nut_row.coordinates.coordinates...)
