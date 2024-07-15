@@ -52,7 +52,7 @@ for ii in 1:length(countries)
         end
     end
 
-    fsru_set = 1:12
+    fsru_set = 1:20
     demand_nodes_set = union(Set(domestic_set), Set(consumers_set))
     supply_nodes_set = union(Set(port_set), Set(import_set))
 
