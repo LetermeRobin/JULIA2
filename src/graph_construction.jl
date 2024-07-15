@@ -303,7 +303,6 @@ function create_graph(ports_coordinates,country_name)
 
     ############# Domestic nodes demands
     domestic_df = innerjoin(domestic_df, nuts_df, on = :nuts_id_2 => :geo)
-    println(domestic_df)
     @rename! domestic_df begin :nuts_2_coordinates = :coordinates; :nuts_gdp = :gdp end
     nuts_incapacities = Dict{String, Float64}()
     for r in eachrow(domestic_df)
