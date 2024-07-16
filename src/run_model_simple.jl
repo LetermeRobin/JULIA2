@@ -73,6 +73,7 @@ for ii in 1:1
     arc_bidirectional = Dict([a => get_prop(g, a..., :is_bidirectional) for a in arc_set])
     arc_length = Dict(a => get_prop(g, a..., :length_km) for a in arc_set)
     flow_cost = 0. #2.64e-5 #M€/km/bcm
+        
     ##Supply
     #import    
     countries_supply = import_countries[ii]
@@ -95,17 +96,21 @@ for ii in 1:1
     total_supply = sum(values(countries_supply))
     ##Demand
     TOTAL_DEMAND = TOTAL_DEMAND_countries[ii]
-    #export
-    countries_demand = countries_export[ii]
+    
+        #export
+    countries_demand = export_countries[ii]
     total_export = sum(values(countries_demand))                                                  
-    #domestic
+    
+        #domestic
     total_domestic_demand = 0.59.*TOTAL_DEMAND #bcm3 per year
     TOT = sum(get_prop(g, n, :gdp_percentage) for n in domestic_set)
     nodal_domestic_demand = Dict((n,t) => get_prop(g, n, :gdp_percentage)*total_domestic_demand[t]*1/TOT for n in domestic_set for t in 1:length(periods))
-    #industrial
+    
+        #industrial
     total_industrial_demand = 0.41.*TOTAL_DEMAND #bcm3 per year
     nodal_industrial_demand = Dict((n,t) => get_prop(g, n, :demand_percentage)*total_industrial_demand[t] for n in consumers_set for t in 1:length(periods))
-    #all demand 
+    
+        #all demand 
     nodal_demand = merge(nodal_domestic_demand, nodal_industrial_demand)
     println("2022: total supply (imports) = $total_supply\ntotal demand = $(TOTAL_DEMAND[1])\ntotal exports = $total_export\nleaving ", TOTAL_DEMAND[1] + total_export - total_supply, " of capacity needed")
     end
