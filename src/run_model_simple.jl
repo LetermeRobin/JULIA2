@@ -125,7 +125,7 @@ for ii in 1:1
             current_percentage = 0.0  # Initialize to zero if property doesn't exist
         end
         for t in 1:length(periods)
-            nodal_domestic_demand = Dict((n,t) => current_percentage*total_domestic_demand[t]*1/TOT 
+            nodal_domestic_demand = Dict(n,t) => current_percentage*total_domestic_demand[t]*1/TOT 
         end
     end
     println(nodal_domestic_demand)  
