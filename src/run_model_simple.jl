@@ -104,19 +104,25 @@ for ii in 1:1
     
         #domestic
     total_domestic_demand = 0.59.*TOTAL_DEMAND #bcm3 per year
-    for n in import_set
-        c = get_prop(g, n, :country)
-        if haskey(import_countries_set, c)
-            push!(import_countries_set[c], n)
+    for n in domestic_set
+        if hasproperty(g, n, :gdp_percentage)
+            current_percentage = get_prop(g, n, :gdp_percentage)
         else
-            import_countries_set[c] = [n]
+            current_percentage = 0.0  # Initialize to zero if property doesn't exist
         end
+        TOT += current_percentage
     end
     for n in domestic_set
         if hasproperty(g, n, :gdp_percentage)
+            current_percentage = get_prop(g, n, :gdp_percentage)
+        else
+            current_percentage = 0.0  # Initialize to zero if property doesn't exist
+        end
+        nodal_domestic_demand = Dict((n,t) => current_percentage*total_domestic_demand[t]*1/TOT for t in 1:length(periods))
+    end
             
-    TOT = 100 #sum(get_prop(g, n, :gdp_percentage) for n in domestic_set)
-    nodal_domestic_demand = Dict((n,t) => #get_prop(g, n, :gdp_percentage)*total_domestic_demand[t]*1/TOT for n in domestic_set for t in 1:length(periods))
+    #TOT = 100 #sum(get_prop(g, n, :gdp_percentage) for n in domestic_set)
+    #nodal_domestic_demand = Dict((n,t) => #get_prop(g, n, :gdp_percentage)*total_domestic_demand[t]*1/TOT for n in domestic_set for t in 1:length(periods))
     
         #industrial
     total_industrial_demand = 0.41.*TOTAL_DEMAND #bcm3 per year
@@ -124,7 +130,7 @@ for ii in 1:1
     
         #all demand 
     nodal_demand = merge(nodal_domestic_demand, nodal_industrial_demand)
-    println("2022: total supply (imports) = $total_supply\ntotal demand = $(TOTAL_DEMAND[1])\ntotal exports = $total_export\nleaving ", TOTAL_DEMAND[1] + total_export - total_supply, " of capacity needed")
+    println("2025: total supply (imports) = $total_supply\ntotal demand = $(TOTAL_DEMAND[1])\ntotal exports = $total_export\nleaving ", TOTAL_DEMAND[1] + total_export - total_supply, " of capacity needed")
     end
     
     ##Model
