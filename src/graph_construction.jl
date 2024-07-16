@@ -25,7 +25,7 @@ function detect_islands(g)
 end
 
 ##Loading and preprocessing
-function create_graph(ports_coordinates,country_name)
+function create_graph(ports_coordinates,country_name,pattern,time_start)
     begin #load data
         nuts_fc = GeoJSON.read(read("data/NUTS_LB_2021_4326.geojson"))
         nuts_dict = Dict(f.NUTS_ID => f.geometry for f in nuts_fc)
@@ -51,8 +51,8 @@ function create_graph(ports_coordinates,country_name)
         end
         population_df = CSV.read("data/demo_r_pjangroup_linear.csv", DataFrame)
         @rsubset! population_df begin
-            occursin(r"^$country_name..$", :geo)   #filter country_name nuts2
-            :TIME_PERIOD == 2025
+            occursin(pattern, :geo) #filter country nuts2
+            :TIME_PERIOD == time_start
             :age == "TOTAL"
             :sex == "T"
         end
@@ -69,16 +69,13 @@ function create_graph(ports_coordinates,country_name)
             :gdppc = :OBS_VALUE
         end
         @rsubset! gdp_df begin
-            occursin(r"^$country_name..$", :geo)   #filter country_name nuts2
+            occursin(pattern, :geo) #filter country nuts2
         end
         nuts_df = innerjoin(gdp_df, population_df, on = :geo)
         @rtransform! nuts_df begin
             :gdp = :gdppc * :population
         end
         TOTAL_GDP = sum(nuts_df.gdp)
-        @rtransform! nuts_df begin
-            :gdp_percentage = :gdp / TOTAL_GDP
-        end
     end
     @transform! nodes_df @byrow begin 
         :x_coor = round(:x_coor, digits = 6)
@@ -138,7 +135,7 @@ function create_graph(ports_coordinates,country_name)
         inserted = add_edge!(g_i, from, to, Dict(:length_km => r.length_km))
     end
     islands = sort(detect_islands(g_i), by = length)[1:end-1]
-    rem_nodes = collect(reduce(union,islands,init=[]))
+    rem_nodes = collect(reduce(union,islands))
     if !isempty(islands)
         @info "$(length(islands)) islands of $(length(rem_nodes)) disconnected nodes were removed. They respectively contained $(length.(islands)) nodes."
         removed_nodes = nodes_df_country[rem_nodes,:]
@@ -236,7 +233,7 @@ function create_graph(ports_coordinates,country_name)
                 from_coordinates = (r.from_x_coor, r.from_y_coor)
                 from_node = coo_to_node[from_coordinates]
                 add_edge!(g, from_node, coo_to_node[to_coordinates], Dict(:diameter_mm => r.diameter_mm, :length_km => r.length_km, :capacity_Mm3_per_d => r.capacity_Mm3_per_d, :is_bidirectional => r.is_bothDirection))
-                if r.is_bothDirection == 1 || first(group).to_country == "BE"
+                if r.is_bothDirection == 1 #|| first(group).to_country == "BE"
                     add_edge!(g, coo_to_node[to_coordinates],from_node, Dict(:diameter_mm => r.diameter_mm, :length_km => r.length_km, :capacity_Mm3_per_d => r.capacity_Mm3_per_d, :is_bidirectional => r.is_bothDirection))
                     set_props!(g, coo_to_node[to_coordinates], Dict(:is_import => true))
                     push!(import_nodes, to_coordinates => coo_to_node[to_coordinates])
@@ -338,11 +335,7 @@ function create_graph(ports_coordinates,country_name)
         for neigh in knn
             node_id = coo_to_node[neigh]
             incapacity = sum(get_prop(g, n, node_id, :capacity_Mm3_per_d) for n in inneighbors(g, node_id))
-            if hasproperty(g, node_id, :gdp_percentage)
-                current_percentage = get_prop(g, node_id, :gdp_percentage)
-            else
-                current_percentage = 0.0  # Initialize to zero if property doesn't exist
-            end
+            current_percentage = get_prop(g, node_id, :gdp_percentage)
             set_prop!(g, node_id, :gdp_percentage, current_percentage + incapacity/total_neigh_incapacity*nut_proportion) #add the unlinked percentage to old percentage
         end
     end
