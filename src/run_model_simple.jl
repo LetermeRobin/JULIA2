@@ -105,8 +105,10 @@ for ii in 1:1
     total_domestic_demand = 0.59.*TOTAL_DEMAND #bcm3 per year
         # Function to check if a node has a specific property
     function has_node_property(g::MetaDiGraph, node::Int, property::Symbol)
-        return has_key(g.vprops[node], property)
+        return haskey(g.vprops[node], property)
     end
+    TOT = 0
+    nodal_domestic_demand = Dict()
     for n in domestic_set
         if has_node_property(g, n, :gdp_percentage)
             current_percentage = get_prop(g, n, :gdp_percentage)
