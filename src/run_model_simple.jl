@@ -27,7 +27,7 @@ for ii in 1:1
     println()
     ports_coordinates = coord_countries[ii]
     g, consumers_dict, domestic_dict, port_dict, import_dict, export_dict  = create_graph(ports_coordinates, countries[ii])
-begin
+    begin
     # Sets
     periods = 1:length(2025:2050)
     node_set = vertices(g)
@@ -63,9 +63,10 @@ begin
     fsru_set = 1:12
     demand_nodes_set = union(Set(domestic_set), Set(consumers_set))
     supply_nodes_set = union(Set(port_set), Set(import_set))
-end
-##Parameters 
-begin
+    end
+    
+    ##Parameters 
+    begin
     γ = 0.99
     demand_multiplier = range(start = 1, stop = 0, length = length(periods)+1)[2:end]
     arc_capacity = Dict([a => get_prop(g, a..., :capacity_Mm3_per_d)*365/1000 for a in arc_set]) #bcm3 per year
@@ -107,9 +108,10 @@ begin
     #all demand 
     nodal_demand = merge(nodal_domestic_demand, nodal_industrial_demand)
     println("2022: total supply (imports) = $total_supply\ntotal demand = $(TOTAL_DEMAND[1])\ntotal exports = $total_export\nleaving ", TOTAL_DEMAND[1] + total_export - total_supply, " of capacity needed")
-end
-##Model
-begin
+    end
+    
+    ##Model
+    begin
     model = Model(HiGHS.Optimizer)
     @variables model begin 
         port_upgrade[port_set,periods], Bin
@@ -172,7 +174,7 @@ begin
     @expression(model, import_price_cost[t in periods], sum(country_price[c]*import_flow[n,t] for c in keys(import_countries_set) for n in import_countries_set[c]))
     @expression(model, total_cost, sum(γ^t*(capex_cost[t] + opex_cost[t] +  pipeline_construction_cost[t] + arc_flow_cost[t] + fsru_price_cost[t] + import_price_cost[t]) for t in periods))
     @objective model Min total_cost
-   
+    end
 
     p = 1e0
     c_map = relax_with_penalty!(model, merge(Dict(model[:c_arc_capacity] .=> p), Dict(model[:c_bidirectional] .=> p)))
