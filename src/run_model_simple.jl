@@ -1,5 +1,4 @@
-using CSV, DataFrames, DataFramesMeta, GeoJSON, Graphs, MetaGraphs, Statistics, DataStructures
-using FSRU, Distances, JuMP
+using CSV, DataFrames, DataFramesMeta, GeoJSON, Graphs, MetaGraphs, Statistics, DataStructures, FSRU, Distances, JuMP
 
 
 countries = ["DE"]
@@ -104,8 +103,12 @@ for ii in 1:1
     
         #domestic
     total_domestic_demand = 0.59.*TOTAL_DEMAND #bcm3 per year
+        # Function to check if a node has a specific property
+    function has_node_property(g::MetaDiGraph, node::Int, property::Symbol)
+        return has_key(g.vprops[node], property)
+    end
     for n in domestic_set
-        if hasproperty(g, n, :gdp_percentage)
+        if has_node_property(g, n, :gdp_percentage)
             current_percentage = get_prop(g, n, :gdp_percentage)
         else
             current_percentage = 0.0  # Initialize to zero if property doesn't exist
@@ -113,7 +116,7 @@ for ii in 1:1
         TOT += current_percentage
     end
     for n in domestic_set
-        if hasproperty(g, n, :gdp_percentage)
+        if has_node_property(g, n, :gdp_percentage)
             current_percentage = get_prop(g, n, :gdp_percentage)
         else
             current_percentage = 0.0  # Initialize to zero if property doesn't exist
