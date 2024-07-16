@@ -103,8 +103,19 @@ for ii in 1:1
     
         #domestic
     total_domestic_demand = 0.59.*TOTAL_DEMAND #bcm3 per year
-    TOT = sum(get_prop(g, n, :gdp_percentage) for n in domestic_set)
-    nodal_domestic_demand = Dict((n,t) => get_prop(g, n, :gdp_percentage)*total_domestic_demand[t]*1/TOT for n in domestic_set for t in 1:length(periods))
+    for n in import_set
+        c = get_prop(g, n, :country)
+        if haskey(import_countries_set, c)
+            push!(import_countries_set[c], n)
+        else
+            import_countries_set[c] = [n]
+        end
+    end
+    for n in domestic_set
+        if hasproperty(g, n, :gdp_percentage)
+            
+    TOT = 100 #sum(get_prop(g, n, :gdp_percentage) for n in domestic_set)
+    nodal_domestic_demand = Dict((n,t) => #get_prop(g, n, :gdp_percentage)*total_domestic_demand[t]*1/TOT for n in domestic_set for t in 1:length(periods))
     
         #industrial
     total_industrial_demand = 0.41.*TOTAL_DEMAND #bcm3 per year
