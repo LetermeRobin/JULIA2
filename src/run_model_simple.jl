@@ -117,15 +117,18 @@ for ii in 1:1
         end
         TOT += current_percentage
     end
+    println(TOT)
     for n in domestic_set
         if has_node_property(g, n, :gdp_percentage)
             current_percentage = get_prop(g, n, :gdp_percentage)
         else
             current_percentage = 0.0  # Initialize to zero if property doesn't exist
         end
-        nodal_domestic_demand = Dict((n,t) => current_percentage*total_domestic_demand[t]*1/TOT for t in 1:length(periods))
+        for t in 1:length(periods)
+            nodal_domestic_demand = Dict((n,t) => current_percentage*total_domestic_demand[t]*1/TOT 
+        end
     end
-            
+    println(nodal_domestic_demand)  
     #TOT = 100 #sum(get_prop(g, n, :gdp_percentage) for n in domestic_set)
     #nodal_domestic_demand = Dict((n,t) => #get_prop(g, n, :gdp_percentage)*total_domestic_demand[t]*1/TOT for n in domestic_set for t in 1:length(periods))
     
