@@ -60,13 +60,13 @@ function map_network(g, consumers_dict, domestic_dict, port_nodes, import_dict, 
     city_points = [Point2f(p.second...) for p in port_coordinates]
     p3 = scatter!(ax, city_points, markersize = 18, marker = :diamond, color = :red, inspectable = false)
 
-    #connection_points = [get_prop(g, port_nodes[p.first], :coordinates) .- p.second for p in port_coordinates]
-    #arrows!(ax, city_points, connection_points, arrowcolor = :black, arrowhead = ' ', linestyle = :dash, inspectable = false)
+    connection_points = [get_prop(g, port_nodes[p.first], :coordinates) .- p.second for p in port_coordinates]
+    arrows!(ax, city_points, connection_points, arrowcolor = :black, arrowhead = ' ', linestyle = :dash, inspectable = false)
     #offsets = Dict("Wilhelmshaven" => (0,10), "Bremerhaven" => (5,-5), "Brunsbüttel" => (3,7), "Hambourg" => (8,0), "Stade" => (-5,6), "Lubeck" => (8,0), "Rostock" => (8,0), "Mukran" => (5,10), "Lubmin" => (8,0), "Emden" => (-5,0), "Duisburg" => (0,10))
     #aligns = Dict("Wilhelmshaven" => (:center, :bottom), "Bremerhaven" => (:left, :top), "Brunsbüttel" => (:center,:bottom), "Hambourg" => (:left,:center), "Stade" => (:center,:bottom), "Lubeck" => (:left, :center), "Rostock" => (:left,:bottom), "Mukran" => (:center,:bottom), "Lubmin" => (:left,:bottom), "Emden" => (:right, :top), "Duisburg" => (:center,:bottom))
 
-    for (city_point, p) in zip(city_points,port_coordinates)
-        t = text!(ax, city_point, text = p.first, fontsize = 20, font = :bold, align = aligns[p.first], offset = offsets[p.first], overdraw = true, color = :black, strokewidth = 1, strokecolor = :white)# p.first in ("Duisburg", "Bremerhaven", "Stade", "Hambourg", "Lubeck", "Rostock") ? :darkolivegreen : :darkolivegreen)
+    for (city_point, p) in zip(city_points, port_coordinates)
+        t = text!(ax, city_point, text = p.first, fontsize = 20, font = :bold, align = :center, offset = (0, 0), overdraw = true, color = :black, strokewidth = 1, strokecolor = :white)
     end
     Legend(f[2,1], [MarkerElement(color = :green, marker = :circle, markersize = 20), MarkerElement(color = :red, marker = :diamond, markersize = 20), MarkerElement(color = :blue, marker = :circle), MarkerElement(color = :orange, marker = :circle), MarkerElement(color = :green, marker = :dtriangle), MarkerElement(color = :orange, marker = :utriangle), [MarkerElement(color = :green, marker = :dtriangle), MarkerElement(color = :orange, marker = :utriangle)]], ["Port nodes", "Port cities", "Domestic nodes", "Industry nodes", "Import nodes", "Export nodes", "Import & Export nodes"], orientation = :horizontal)
     DataInspector(f)
