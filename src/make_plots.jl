@@ -42,3 +42,8 @@ end
 barplot!(ax,tbl.year, tbl.imports, stack = tbl.stackgrp, label = tbl.country, color = [colors[g] for g in tbl.stackgrp])
 Legend(f[1,1], reverse([PolyElement(polycolor = colors[i]) for i in 1:length(unique(tbl.country))]), reverse(unique(tbl.country)), "Port", margin = (10, 10, 10, 10), halign = :right, valign = :top, tellheight = false, tellwidth = false)
 display(f)
+if BROWNFIELD
+    save("fsru_imports_res.png", f)
+else
+    save("fsru_imports_free.png", f)
+end

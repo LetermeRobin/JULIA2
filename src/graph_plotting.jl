@@ -3,7 +3,7 @@ export map_network
 GLMakie.activate!(inline=false)
 
 function map_network(g, consumers_dict, domestic_dict, port_nodes, import_dict, export_dict, port_coordinates; highlight_nodes = Int[], highlight_arcs = Tuple{Int,Int}[])
-    polys = [c.geometry for c in GeoJSON.read(read("data/DE_districts.geojson"))] 
+    polys = [c.geometry for c in GeoJSON.read(read("data/europe.geojson"))] 
     f = Figure(size = (1440,1440));
     ax = GeoAxis(f[1,1];  limits = ((5,16), (47,56)), yrectzoom = false, xrectzoom = false, dest = "+proj=merc");
     for poly in polys
@@ -60,10 +60,10 @@ function map_network(g, consumers_dict, domestic_dict, port_nodes, import_dict, 
     city_points = [Point2f(p.second...) for p in port_coordinates]
     p3 = scatter!(ax, city_points, markersize = 18, marker = :diamond, color = :red, inspectable = false)
 
-    connection_points = [get_prop(g, port_nodes[p.first], :coordinates) .- p.second for p in port_coordinates]
-    arrows!(ax, city_points, connection_points, arrowcolor = :black, arrowhead = ' ', linestyle = :dash, inspectable = false)
-    offsets = Dict("Wilhelmshaven" => (0,10), "Bremerhaven" => (5,-5), "Brunsbüttel" => (3,7), "Hambourg" => (8,0), "Stade" => (-5,6), "Lubeck" => (8,0), "Rostock" => (8,0), "Mukran" => (5,10), "Lubmin" => (8,0), "Emden" => (-5,0), "Duisburg" => (0,10))
-    aligns = Dict("Wilhelmshaven" => (:center, :bottom), "Bremerhaven" => (:left, :top), "Brunsbüttel" => (:center,:bottom), "Hambourg" => (:left,:center), "Stade" => (:center,:bottom), "Lubeck" => (:left, :center), "Rostock" => (:left,:bottom), "Mukran" => (:center,:bottom), "Lubmin" => (:left,:bottom), "Emden" => (:right, :top), "Duisburg" => (:center,:bottom))
+    #connection_points = [get_prop(g, port_nodes[p.first], :coordinates) .- p.second for p in port_coordinates]
+    #arrows!(ax, city_points, connection_points, arrowcolor = :black, arrowhead = ' ', linestyle = :dash, inspectable = false)
+    #offsets = Dict("Wilhelmshaven" => (0,10), "Bremerhaven" => (5,-5), "Brunsbüttel" => (3,7), "Hambourg" => (8,0), "Stade" => (-5,6), "Lubeck" => (8,0), "Rostock" => (8,0), "Mukran" => (5,10), "Lubmin" => (8,0), "Emden" => (-5,0), "Duisburg" => (0,10))
+    #aligns = Dict("Wilhelmshaven" => (:center, :bottom), "Bremerhaven" => (:left, :top), "Brunsbüttel" => (:center,:bottom), "Hambourg" => (:left,:center), "Stade" => (:center,:bottom), "Lubeck" => (:left, :center), "Rostock" => (:left,:bottom), "Mukran" => (:center,:bottom), "Lubmin" => (:left,:bottom), "Emden" => (:right, :top), "Duisburg" => (:center,:bottom))
 
     for (city_point, p) in zip(city_points,port_coordinates)
         t = text!(ax, city_point, text = p.first, fontsize = 20, font = :bold, align = aligns[p.first], offset = offsets[p.first], overdraw = true, color = :black, strokewidth = 1, strokecolor = :white)# p.first in ("Duisburg", "Bremerhaven", "Stade", "Hambourg", "Lubeck", "Rostock") ? :darkolivegreen : :darkolivegreen)

@@ -134,6 +134,7 @@ function create_graph(ports_coordinates,country_name,pattern,time_start)
         from, to = coo_to_node[(r.from_x_coor, r.from_y_coor)], coo_to_node[(r.to_x_coor, r.to_y_coor)]
         inserted = add_edge!(g_i, from, to, Dict(:length_km => r.length_km))
     end
+
     islands = sort(detect_islands(g_i), by = length)[1:end-1]
     rem_nodes = collect(reduce(union,islands))
     if !isempty(islands)
@@ -141,6 +142,7 @@ function create_graph(ports_coordinates,country_name,pattern,time_start)
         removed_nodes = nodes_df_country[rem_nodes,:]
         deleteat!(nodes_df_country, sort(rem_nodes))
     end
+
     empty!(coo_to_node)
     ############### Nodes addition
 
@@ -217,11 +219,12 @@ function create_graph(ports_coordinates,country_name,pattern,time_start)
         :from_country == country_name
         (:from_x_coor, :from_y_coor) in keys(coo_to_node)
     end
+   
     for r in eachrow(incoming_arcs)
-        if r.from_country == "XX"
-            r.from_country = "NO"
-        end
-    end
+                           if r.from_country == "NotSpec"
+                                   r.from_country = "NO"
+                           end
+          end
     @show keys(groupby(incoming_arcs, :from_country))
     for country_group in groupby(outgoing_arcs, :to_country)
         for group in groupby(country_group, [:to_x_coor, :to_y_coor])

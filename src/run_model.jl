@@ -1,28 +1,10 @@
 using FSRU, Distances, JuMP
 
+ports_coordinates = Dict()
 
-#rewriting data to study juste a "simple case" 
-countries = ["DE"]
-coord_countries = [coord_DE]
-country_prices = [country_price_de]
-import_countries = [import_de]
-export_countries = [export_DE]
-TOTAL_DEMAND_countries = [TOTAL_DEMAND_DE] #ok
-pattern_countries = [r"^DE..$"] #ok
-
-time_start = 2022 #CANNOT BE CHANGED
-
+g, consumers_dict, domestic_dict, port_dict, import_dict, export_dict  = create_graph(ports_coordinates,"AT")
 
 ##Sets 
-for ii in 1:1 #1:length(countries)
-
-country_name = countries[ii]
-pattern = pattern_countries[ii]
-ports_coordinates = coord_countries[ii]
-#ports_coordinates = Dict(["Mukran" => (13.644526, 54.512157),"Wilhelmshaven" => (8.108275, 53.640799), "Brunsbüttel" => (9.175174, 53.888166), "Lubmin" => (13.648727, 54.151454), "Stade" => (9.506341, 53.648904), "Emden" => (7.187397, 53.335209), "Rostock" => (12.106811, 54.098095), "Lubeck" => (10.685321, 53.874815), "Bremerhaven" => (8.526210, 53.593061), "Hambourg" => (9.962496, 53.507492), "Duisburg" => (6.739063, 51.431325)])
-g, consumers_dict, domestic_dict, port_dict, import_dict, export_dict  = create_graph(ports_coordinates,country_name,pattern,time_start)
-
-
 begin
     periods = 1:length(2023:2050)
     node_set = vertices(g)
@@ -68,13 +50,12 @@ begin
     arc_length = Dict(a => get_prop(g, a..., :length_km) for a in arc_set)
     flow_cost = 0. #2.64e-5 #M€/km/bcm
     ##Supply
-    
     #import    
-    countries_supply = import_countries[ii]    
+    countries_supply = Dict("BE" => 26.58, "AT" => 0.39, "NO" => 49.24, "CZ" => 11.96, "CH" => 1.69, "FR" => 0.42, "PL" => 0.3, "DK" => 0.001, "NL" => 26.15, "FI" => 0.) #bcm3 per year
     price_fsru = 35.29*9769444.44/1e6 #ACER EU spot price [EUR/MWh] converted to M€/bcm (avg 31/03 -> 31/12 2023)
     price_ttf = price_fsru + 2.89*9769444.44/1e6 #add ACER TTF benchmark, converted (avg 31/03 -> 31/12 2023)
     price_hh = 2.496*35315000*1.0867/1e6 #$/mmbtu (US EIA) converted to M€/bcm (US EIA) (avg 04 -> 12 2023)
-    country_price = country_prices[ii]
+    country_price = Dict("BE" => price_ttf, "AT" => price_hh, "NO" => price_hh, "CZ" => price_hh, "CH" => price_hh, "FR" => price_ttf, "PL" => price_hh, "DK" => price_hh, "NL" => price_ttf, "FI" => 0.)
     total_import = sum(values(countries_supply))
     #ports
     fsru_per_port = Dict(port_set .=> 1); 
@@ -82,24 +63,32 @@ begin
     new_pipeline_length = Dict(node => haversine(ports_coordinates[city], get_prop(g,node,:coordinates))/1000 for (city, node) in port_dict) #km
     investment_horizon = 10
     pipeline_cost_per_km = 0.3  #(capex + opex, depends on diameter) #M€
-    total_capex = 1000 
+    total_capex = 1000 # - new_pipeline_length[port_dict["Wilhelmshaven"]]*pipeline_cost_per_km*fsru_per_port[port_dict["Wilhelmshaven"]]
     port_capex = fill(sum(total_capex/investment_horizon/(1 + (1-γ))^t for t in 1:investment_horizon), length(periods))
     port_opex = 0.02*total_capex #opex per fsru in use
     #FSRUs
     fsru_cap = Dict(fsru_set .=> 5) #bcm per year
     #all
     total_supply = sum(values(countries_supply))
-    
     ##Demand
-    TOTAL_DEMAND = TOTAL_DEMAND_countries[ii]
-    
+    if DEMAND == "Ours"
+        TOTAL_DEMAND = range(86.7,0.,length(2022:2050))[2:end]
+    elseif DEMAND == "NZE"
+        TOTAL_DEMAND = [[(812+855)/2, 812, (794+812)/2]; range(794,582,length(2026:2030)); range(582,0.,length(2030:2050))[2:end]]*0.1
+    elseif DEMAND == "DE Gov"
+        TOTAL_DEMAND = [[86.0, 85.0, 82.0, 80.3, 78.7, 77.1, 75.5]; range(74.1, 0.,length(2030:2050))]
+    else 
+        error("Invalid DEMAND parameter \"$DEMAND\"")
+    end
     #export
-    countries_demand = export_countries[ii]    
+    countries_demand = Dict("BE" => 0., "AT" => 8.03, "LU" => 0., "CZ" => 29.57, "CH" => 3.36, "FR" => 1.37, "PL" => 3.76, "FI" => 0., "DK" => 2.17, "NL" => 2.77) #bcm3 per year 
     total_export = sum(values(countries_demand))                                                  
-    #domestic
-    total_domestic_demand = 0.59.*TOTAL_DEMAND #bcm3 per year
-    TOT = sum(get_prop(g, n, :gdp_percentage) for n in domestic_set)
-    nodal_domestic_demand = Dict((n,t) => get_prop(g, n, :gdp_percentage)*total_domestic_demand[t]*1/TOT for n in domestic_set for t in 1:length(periods))
+    # Domestic
+    total_domestic_demand = 0.59 * TOTAL_DEMAND #bcm3 per year
+    TOT = 100
+    nodal_domestic_demand = Dict((n,t) => 1*total_domestic_demand[t]*1/TOT for n in domestic_set for t in 1:length(periods))
+    
+
     #industrial
     total_industrial_demand = 0.41.*TOTAL_DEMAND #bcm3 per year
     nodal_industrial_demand = Dict((n,t) => get_prop(g, n, :demand_percentage)*total_industrial_demand[t] for n in consumers_set for t in 1:length(periods))
@@ -209,60 +198,9 @@ println("capex: ", value(sum(capex_cost)) + value(sum(pipeline_construction_cost
 println("opex: ", value(sum(opex_cost)))
 fsruimp = value(sum(fsru_flow))
 println("FSRU imports: ", fsruimp," ", fsruimp*price_fsru)
-#ttfimp = value(sum(sum(import_flow[n,:]) for n in import_set if n in reduce(vcat, [import_countries_set["BE"], import_countries_set["NL"], import_countries_set["FR"]])))
-#println("TTF imports: ", ttfimp," ", ttfimp*price_ttf)
-#hhimp = value(sum(sum(import_flow[n,:]) for n in import_set if n ∉ reduce(vcat, [import_countries_set["BE"], import_countries_set["NL"], import_countries_set["FR"]])))
-#println("HH imports: ", hhimp," ", hhimp*price_hh)
+ttfimp = value(sum(sum(import_flow[n,:]) for n in import_set if n in reduce(vcat, [import_countries_set["BE"], import_countries_set["NL"], import_countries_set["FR"]])))
+println("TTF imports: ", ttfimp," ", ttfimp*price_ttf)
+hhimp = value(sum(sum(import_flow[n,:]) for n in import_set if n ∉ reduce(vcat, [import_countries_set["BE"], import_countries_set["NL"], import_countries_set["FR"]])))
+println("HH imports: ", hhimp," ", hhimp*price_hh)
 println("penalty: ", pens*p)
 println("total cost (no penalties): ", value(total_cost) -  pens*p)
-
-
-if !BROWNFIELD  # brownfield = false
-        include("graph_plotting.jl")
-        FSRU.GLMakie.activate!(inline=true)
-
-        map = map_network(g, consumers_dict, domestic_dict, port_dict, import_dict, export_dict, ports_coordinates, highlight_arcs = penalized_arcs)
-        save("$(country_name)_map.png", map)
-    end
-
-    colors = [Makie.wong_colors(); [:green, :darkblue, :lightgreen]]
-    imports = [c => [round(sum(value(import_flow[n,t]) for n in nodes), digits = 3) for t in periods] for (c, nodes) in import_countries_set]
-    sort!(imports, by = p -> first(p.second), rev = true)
-    f = Figure(size = (2560, 1000)./3);
-    ax=Axis(f[1, 1], xlabel = "Year", ylabel = "bcm", xticks = (collect(1:3:length(periods)), string.(collect(2023:3:2050))), yscale = Makie.pseudolog10, yticks = [0,5,10,20,40,60])
-    for (i,(c, ys)) in enumerate(imports) 
-        if first(ys) > 0
-            lines!(periods, ys, label = c, color = colors[i], linestyle = c in ("NL", "BE", "FR") ? :dash : :solid, linewidth = c in ("NL", "BE", "FR") ? 3 : 2)
-        end
-    end
-    f[1,2] = Legend(f, ax, "Country", margin = (0, 0, 0, 0), halign = :left, valign = :center, tellheight = false, tellwidth = true)
-
-    if BROWNFIELD
-        save("pipeline_imports_res_$(country_name).png", f)
-    else
-        save("pipeline_imports_free_$(country_name).png", f)
-    end
-
-    fsru_imports = [c => round.(value.(fsru_flow)[n,:], digits =2).data for (c,n) in port_dict if sum(value.(fsru_flow)[n,:]) > 0]
-    sort!(fsru_imports, by = p -> first(p.second), rev = false)
-    f = Figure(size = (2560, 1000)./3);
-    ax=Axis(f[1, 1], xlabel = "Year", ylabel = "bcm", limits = ((0, length(2023:2050)),(0,37)), xticks = (collect(1:3:length(periods)), string.(collect(2023:3:2050))))
-    tbl = (year=Int[],country=String[], imports=Float64[], stackgrp=Int[])
-    for (i,(c, ys)) in enumerate(fsru_imports)
-        if sum(ys) > 0
-            for (t,y) in enumerate(ys)
-                push!(tbl.year, t)
-                push!(tbl.country, c)
-                push!(tbl.stackgrp, i)
-                push!(tbl.imports, y)
-            end
-        end
-    end
-    barplot!(ax,tbl.year, tbl.imports, stack = tbl.stackgrp, label = tbl.country, color = [colors[g] for g in tbl.stackgrp])
-    Legend(f[1,1], reverse([PolyElement(polycolor = colors[i]) for i in 1:length(unique(tbl.country))]), reverse(unique(tbl.country)), "Port", margin = (10, 10, 10, 10), halign = :right, valign = :top, tellheight = false, tellwidth = false)
-if BROWNFIELD
-    save("fsru_imports_res.png", f)
-else
-    save("fsru_imports_free_$(country_name).png", f)
-end
-end
