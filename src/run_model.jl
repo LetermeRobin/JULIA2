@@ -17,6 +17,8 @@ time_start = 2022 #CANNOT BE CHANGED
 for ii in 1:1 #1:length(countries)
 
 country_name = countries[ii]
+
+println("--------------- DATA for ", country_name, "--------------------")
 pattern = pattern_countries[ii]
 ports_coordinates = coord_countries[ii]
 #ports_coordinates = Dict(["Mukran" => (13.644526, 54.512157),"Wilhelmshaven" => (8.108275, 53.640799), "Brunsbüttel" => (9.175174, 53.888166), "Lubmin" => (13.648727, 54.151454), "Stade" => (9.506341, 53.648904), "Emden" => (7.187397, 53.335209), "Rostock" => (12.106811, 54.098095), "Lubeck" => (10.685321, 53.874815), "Bremerhaven" => (8.526210, 53.593061), "Hambourg" => (9.962496, 53.507492), "Duisburg" => (6.739063, 51.431325)])
@@ -178,10 +180,17 @@ c_map = relax_with_penalty!(model, merge(Dict(model[:c_arc_capacity] .=> p), Dic
 
 optimize!(model)
 solution_summary(model)
-penalties = Dict(con => value(penalty) for (con, penalty) in c_map if value(penalty) > 0);
-@assert all(>=(0), values(penalties))
-maximum(values(penalties))
-pens = sum(values(penalties))
+
+penalties = Dict(con => value(penalty) for (con, penalty) in c_map if value(penalty) > 0)
+
+if !isempty(penalties)
+    @assert all(>=(0), values(penalties))
+    max_penalty = maximum(values(penalties))
+    total_penalties = sum(values(penalties))
+else
+    max_penalty = 0.0
+    total_penalties = 0.0
+end
 
 penalized_cons = filter(kv -> value(kv.second) > 0, c_map)
 penalized_arcs = [eval(Meta.parse(match(r"\[(.*)\]", name(k)).captures[1]))[1] for k in keys(penalized_cons)] |> unique
