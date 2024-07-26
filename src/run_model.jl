@@ -186,10 +186,10 @@ penalties = Dict(con => value(penalty) for (con, penalty) in c_map if value(pena
 if !isempty(penalties)
     @assert all(>=(0), values(penalties))
     max_penalty = maximum(values(penalties))
-    total_penalties = sum(values(penalties))
+    pens = sum(values(penalties))
 else
     max_penalty = 0.0
-    total_penalties = 0.0
+    pens = 0.0
 end
 
 penalized_cons = filter(kv -> value(kv.second) > 0, c_map)
