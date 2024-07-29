@@ -182,8 +182,8 @@ function create_graph(ports_coordinates,country_name,pattern,time_start)
         set_props!(g, node_id, Dict(:capacity_E_MW => r.capacity_E_MW, :capacity_TH_MW => r.capacity_TH_MW))
         push!(consumers_dict, coo => node_id)
     end
-    total_E_MW = sum(props(g, node)[:capacity_E_MW] for node in values(consumers_dict) if props(g, node)[:country] == country_name)
-    total_TH_MW = sum(props(g, node)[:capacity_TH_MW] for node in values(consumers_dict) if props(g, node)[:country] == country_name)
+    total_E_MW = sum(props(g, node)[:capacity_E_MW] for node in values(consumers_dict) if props(g, node)[:country] == country_name; init=0.0)
+    total_TH_MW = sum(props(g, node)[:capacity_TH_MW] for node in values(consumers_dict) if props(g, node)[:country] == country_name; init=0.0)
     total_MW = total_E_MW + total_TH_MW
     for node in values(consumers_dict) 
         props(g, node)[:country] == country_name || continue
