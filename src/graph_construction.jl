@@ -134,9 +134,8 @@ function create_graph(ports_coordinates,country_name,pattern,time_start)
         from, to = coo_to_node[(r.from_x_coor, r.from_y_coor)], coo_to_node[(r.to_x_coor, r.to_y_coor)]
         inserted = add_edge!(g_i, from, to, Dict(:length_km => r.length_km))
     end
-
     islands = sort(detect_islands(g_i), by = length)[1:end-1]
-    rem_nodes = collect(reduce(union,islands))
+    rem_nodes = collect(reduce(union, islands, init=Set()))
     if !isempty(islands)
         @info "$(length(islands)) islands of $(length(rem_nodes)) disconnected nodes were removed. They respectively contained $(length.(islands)) nodes."
         removed_nodes = nodes_df_country[rem_nodes,:]
