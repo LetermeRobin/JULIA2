@@ -2,7 +2,7 @@ using FSRU, Distances, JuMP
 
 
 #rewriting data to study juste a "simple case" 
-countries = ["DK"]
+countries = [""]
 coord_countries = [coord_DK]
 country_prices = [country_price_dk]
 import_countries = [import_dk]
@@ -10,13 +10,13 @@ export_countries = [export_DK]
 TOTAL_DEMAND_countries = [TOTAL_DEMAND_DK] #ok
 pattern_countries = [r"^DK..$"] #ok
 
-countries = ["BE"]
-coord_countries = [coord_BE]
-country_prices = [country_price_be]
-import_countries = [import_be]
-export_countries = [export_BE]
-TOTAL_DEMAND_countries = [TOTAL_DEMAND_BE] #ok
-pattern_countries = [r"^BE..$"] #ok
+countries = ["BG"]
+coord_countries = [coord_BG]
+country_prices = [country_price_bg]
+import_countries = [import_bg]
+export_countries = [export_BG]
+TOTAL_DEMAND_countries = [TOTAL_DEMAND_BG] #ok
+pattern_countries = [r"^BG..$"] #ok
 
 time_start = 2022 #CANNOT BE CHANGED
 
@@ -29,7 +29,6 @@ country_name = countries[ii]
 println("--------------- DATA for ", country_name, "--------------------")
 pattern = pattern_countries[ii]
 ports_coordinates = coord_countries[ii]
-#ports_coordinates = Dict(["Mukran" => (13.644526, 54.512157),"Wilhelmshaven" => (8.108275, 53.640799), "Brunsbüttel" => (9.175174, 53.888166), "Lubmin" => (13.648727, 54.151454), "Stade" => (9.506341, 53.648904), "Emden" => (7.187397, 53.335209), "Rostock" => (12.106811, 54.098095), "Lubeck" => (10.685321, 53.874815), "Bremerhaven" => (8.526210, 53.593061), "Hambourg" => (9.962496, 53.507492), "Duisburg" => (6.739063, 51.431325)])
 g, consumers_dict, domestic_dict, port_dict, import_dict, export_dict  = create_graph(ports_coordinates,country_name,pattern,time_start)
 
 
