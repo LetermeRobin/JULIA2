@@ -142,8 +142,8 @@ begin
         c_import_flow[node in setdiff(import_set,export_set),t in periods],
             import_flow[node,t] + sum(arc_flow[(src, node),t] for src in inneighbors(g, node)) == sum(arc_flow[(node,dst),t] for dst in outneighbors(g, node))
         #country import 
-        c_country_import[c in keys(import_countries_set),t in periods],
-            sum(import_flow[n,t] for n in import_countries_set[c]) <= countries_supply[c]
+        @constraint(model, c_country_import[c in keys(import_countries_set), t in periods],
+            sum(import_flow[n,t] for n in import_countries_set[c]) <= get(countries_supply, c, 0.0))
         #export flow
         c_export_flow[node in setdiff(export_set, import_set), t in periods],
             sum(arc_flow[(src, node), t] for src in inneighbors(g, node)) == sum(arc_flow[(node,dst),t] for dst in outneighbors(g, node)) + export_flow[node,t]
